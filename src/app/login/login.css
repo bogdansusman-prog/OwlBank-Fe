@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(circle at top, #312e81 0%, transparent 40%),
+    linear-gradient(135deg, #0f172a, #111827);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 40px;
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 18px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(124, 58, 237, 0.15);
+}
+
+h1 {
+  margin: 0 0 8px;
+  text-align: center;
+  color: #111827;
+  font-size: 32px;
+}
+
+.subtitle {
+  margin: 0 0 30px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+  background-color: white;
+
+  color: #111827;
+  font-size: 16px;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+}
+
+.login-button {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+
+  width: 100%;
+  padding: 13px;
+  margin-top: 4px;
+
+  border: none;
+  border-radius: 9px;
+
+  background-color: #6d28d9;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-button:hover {
+  background:
+    radial-gradient(
+      circle 250px at var(--mouse-x) var(--mouse-y),
+      #e879f9 0%,
+      #c026d3 30%,
+      #8b5cf6 55%,
+      transparent 75%
+    ),
+    #6d28d9;
+
+  transform: translateY(-2px);
+
+  /* Fac sa lumineze butonul */
+  box-shadow:
+    0 10px 22px rgba(124, 58, 237, 0.4),
+    0 0 16px rgba(217, 70, 239, 0.25);
+}
+
+.login-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.register-link {
+  margin: 22px 0 0;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #440a7a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  color: #570a91;
+  text-decoration: underline;
+}
