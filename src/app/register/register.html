@@ -1,4 +1,9 @@
 <div class="register-page">
+    <img
+      src="/owlbank-logo.png"
+      alt="OwlBank logo"
+      class="owlbank-logo"
+    >
   <div class="register-card">
     <div class="logo">OwlBank</div>
 
@@ -84,11 +89,13 @@
       }
 
       <button
-        type="submit"
-        [disabled]="registerForm.invalid"
-      >
-        Create account
-      </button>
+  type="submit"
+  class="register-button"
+  (mousemove)="onButtonMouseMove($event)"
+  [disabled]="registerForm.invalid"
+>
+  Create account
+</button>
 
       <p class="login-link">
         Already have an account?

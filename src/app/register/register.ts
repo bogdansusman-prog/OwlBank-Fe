@@ -45,4 +45,14 @@ export class Register {
 
     this.router.navigate(['/login']);
   }
+  onButtonMouseMove(event: MouseEvent): void {
+  const button = event.currentTarget as HTMLButtonElement;
+  const rect = button.getBoundingClientRect();
+
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
+
+  button.style.setProperty('--mouse-x', `${mouseX}px`);
+  button.style.setProperty('--mouse-y', `${mouseY}px`);
+}
 }

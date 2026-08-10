@@ -4,11 +4,19 @@
 }
 
 .login-page {
-  min-height: 100vh;
+  width: 100%;
+  min-height: 100dvh;
+
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+
+  padding:
+    max(20px, env(safe-area-inset-top))
+    20px
+    max(20px, env(safe-area-inset-bottom));
+
   box-sizing: border-box;
 
   background:
@@ -16,57 +24,101 @@
     linear-gradient(135deg, #0f172a, #111827);
 }
 
+/* Logo */
+
+.owlbank-logo {
+  width: clamp(120px, 22vw, 180px);
+  height: auto;
+
+  margin-bottom: clamp(16px, 3vw, 26px);
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 0 15px rgba(139, 92, 246, 0.45))
+    drop-shadow(0 0 30px rgba(168, 85, 247, 0.2));
+}
+
+/* Login card */
+
 .login-card {
-  width: 100%;
-  max-width: 380px;
-  padding: 40px;
+  width: min(100%, 380px);
+
+  padding: clamp(24px, 5vw, 40px);
+
   box-sizing: border-box;
 
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 18px;
+  background: #111111;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: clamp(14px, 3vw, 18px);
 
   box-shadow:
     0 25px 60px rgba(0, 0, 0, 0.45),
-    0 0 30px rgba(124, 58, 237, 0.15);
+    0 0 30px rgba(124, 58, 237, 0.12);
 }
 
-h1 {
+/* Title */
+
+.login-card h1 {
   margin: 0 0 8px;
+
   text-align: center;
-  color: #111827;
-  font-size: 32px;
+  color: white;
+
+  font-size: clamp(24px, 5vw, 32px);
 }
+
+/* Subtitle */
 
 .subtitle {
-  margin: 0 0 30px;
+  margin: 0 0 clamp(22px, 4vw, 30px);
+
   text-align: center;
-  color: #6b7280;
+  color: #9ca3af;
+
+  font-size: clamp(13px, 2.8vw, 15px);
 }
 
+/* Form */
+
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: clamp(16px, 3vw, 20px);
 }
 
 label {
   display: block;
+
   margin-bottom: 8px;
-  color: #374151;
-  font-size: 14px;
+
+  color: #e5e7eb;
+
+  font-size: clamp(12px, 2.6vw, 14px);
   font-weight: 600;
 }
 
+/* Inputs */
+
 input {
   width: 100%;
+  min-height: 48px;
+
   padding: 12px 14px;
+
   box-sizing: border-box;
 
-  border: 1px solid #d1d5db;
+  border: 1px solid #333;
   border-radius: 9px;
-  background-color: white;
 
-  color: #111827;
+  background: #111111;
+  color: white;
+
+  /*
+    16px este intenționat.
+    Pe telefoane evită zoom-ul automat în input.
+  */
   font-size: 16px;
+
   outline: none;
 
   transition:
@@ -74,27 +126,37 @@ input {
     box-shadow 0.2s ease;
 }
 
+input::placeholder {
+  color: #9ca3af;
+}
+
 input:focus {
   border-color: #7c3aed;
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+
+  box-shadow:
+    0 0 0 4px rgba(124, 58, 237, 0.15);
 }
+
+/* Login button */
 
 .login-button {
   --mouse-x: 50%;
   --mouse-y: 50%;
 
   width: 100%;
-  padding: 13px;
-  margin-top: 4px;
+  min-height: 46px;
+
+  padding: 12px 16px;
 
   border: none;
   border-radius: 9px;
 
-  background-color: #6d28d9;
+  background: #6d28d9;
   color: white;
 
-  font-size: 16px;
+  font-size: clamp(14px, 3vw, 16px);
   font-weight: 700;
+
   cursor: pointer;
 
   transition:
@@ -115,7 +177,6 @@ input:focus {
 
   transform: translateY(-2px);
 
-  /* Fac sa lumineze butonul */
   box-shadow:
     0 10px 22px rgba(124, 58, 237, 0.4),
     0 0 16px rgba(217, 70, 239, 0.25);
@@ -125,20 +186,89 @@ input:focus {
   transform: translateY(0) scale(0.98);
 }
 
+/* Register link */
+
 .register-link {
-  margin: 22px 0 0;
+  margin: clamp(17px, 4vw, 22px) 0 0;
+
   text-align: center;
   color: #9ca3af;
-  font-size: 14px;
+
+  font-size: clamp(12px, 2.8vw, 14px);
+  line-height: 1.5;
 }
 
 .register-link a {
-  color: #440a7a;
+  color: #d946ef;
+
   font-weight: 700;
   text-decoration: none;
 }
 
 .register-link a:hover {
-  color: #570a91;
+  color: #e879f9;
   text-decoration: underline;
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  .login-page {
+    justify-content: flex-start;
+
+    padding-top: max(28px, env(safe-area-inset-top));
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .owlbank-logo {
+    width: clamp(110px, 35vw, 135px);
+    margin-bottom: 18px;
+  }
+
+  .login-card {
+    width: 100%;
+    padding: clamp(22px, 6vw, 26px);
+  }
+}
+
+/* Telefoane foarte înguste */
+
+@media (max-width: 360px) {
+  .login-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .owlbank-logo {
+    width: 110px;
+  }
+
+  .login-card {
+    padding: 20px 18px;
+  }
+
+  input {
+    padding: 11px 12px;
+  }
+}
+
+/* Telefoane pe landscape / ecrane joase */
+
+@media (max-height: 650px) and (orientation: landscape) {
+  .login-page {
+    justify-content: flex-start;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .owlbank-logo {
+    width: 90px;
+    margin-bottom: 12px;
+  }
+
+  .login-card {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }

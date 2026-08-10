@@ -1,0 +1,133 @@
+<div class="identity-page">
+  <div class="identity-card">
+    <div class="logo">OwlBank</div>
+
+    <h1>Verify your identity</h1>
+
+    <p class="subtitle">
+      Enter the information from your identity card
+    </p>
+
+    <form
+      #identityForm="ngForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="name-row">
+        <div class="form-group">
+          <label for="firstName">First name</label>
+
+          <input
+            id="firstName"
+            type="text"
+            name="firstName"
+            [(ngModel)]="firstName"
+            placeholder="First name"
+            autocomplete="given-name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last name</label>
+
+          <input
+            id="lastName"
+            type="text"
+            name="lastName"
+            [(ngModel)]="lastName"
+            placeholder="Last name"
+            autocomplete="family-name"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cnp">CNP</label>
+
+        <input
+          id="cnp"
+          type="text"
+          name="cnp"
+          [(ngModel)]="cnp"
+          (input)="onCnpInput()"
+          placeholder="13 digits"
+          inputmode="numeric"
+          maxlength="13"
+          autocomplete="off"
+          required
+        />
+
+        <small>
+          {{ cnp.length }}/13 digits
+        </small>
+      </div>
+
+      <div class="document-row">
+        <div class="form-group series-group">
+          <label for="documentSeries">ID series</label>
+
+          <input
+            id="documentSeries"
+            type="text"
+            name="documentSeries"
+            [(ngModel)]="documentSeries"
+            (input)="onDocumentSeriesInput()"
+            placeholder="AB"
+            maxlength="2"
+            autocomplete="off"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="documentNumber">ID number</label>
+
+          <input
+            id="documentNumber"
+            type="text"
+            name="documentNumber"
+            [(ngModel)]="documentNumber"
+            (input)="onDocumentNumberInput()"
+            placeholder="123456"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="off"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Home address</label>
+
+        <textarea
+          id="address"
+          name="address"
+          [(ngModel)]="address"
+          placeholder="Street, number, city, county"
+          autocomplete="street-address"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+
+      @if (errorMessage) {
+        <p class="error-message">
+          {{ errorMessage }}
+        </p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="identityForm.invalid"
+      >
+        Verify identity
+      </button>
+
+      <p class="back-link">
+        <a routerLink="/register">Back to account details</a>
+      </p>
+    </form>
+  </div>
+</div>
