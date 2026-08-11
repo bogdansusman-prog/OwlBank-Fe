@@ -62,20 +62,20 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "owlbank-fe:build:production"
-            },
-            "development": {
-              "buildTarget": "owlbank-fe:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "test": {
-          "builder": "@angular/build:unit-test"
-        }
+  "builder": "@angular/build:dev-server",
+  "options": {
+    "proxyConfig": "src/proxy.conf.json"
+  },
+  "configurations": {
+    "production": {
+      "buildTarget": "owlbank-fe:build:production"
+    },
+    "development": {
+      "buildTarget": "owlbank-fe:build:development"
+    }
+  },
+  "defaultConfiguration": "development"
+}
       }
     }
   }
