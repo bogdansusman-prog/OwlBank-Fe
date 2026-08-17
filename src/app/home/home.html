@@ -1,4 +1,86 @@
 <div class="home-page">
-  <h1>Welcome to OwlBank</h1>
-  <p>You have logged in successfully.</p>
+
+  <nav class="navbar">
+    <div class="brand">OwlBank</div>
+
+    <div class="nav-links">
+      <a routerLink="/home" class="active">Home</a>
+      <a routerLink="/account">Account</a>
+      <a routerLink="/transfer">Transfer</a>
+      <a routerLink="/statements">Statements</a>
+    </div>
+
+    <button class="profile-button" type="button">
+    </button>
+  </nav>
+
+  <main class="dashboard">
+
+    <section class="balance-section">
+
+  <img
+    src="/owlbank-logo.png"
+    alt="OwlBank"
+    class="balance-logo balance-logo-left"
+  >
+
+  <div class="balance-card">
+    <p>Available Balance</p>
+    <h1>$0.00</h1>
+  </div>
+
+  <img
+    src="/owlbank-logo.png"
+    alt="OwlBank"
+    class="balance-logo balance-logo-right"
+  >
+
+</section>
+
+    <section class="transactions-card">
+
+      <div class="section-header">
+        <h2>Recent Transactions</h2>
+        <button type="button">View all ›</button>
+      </div>
+
+      <div class="empty-transactions">
+        <p>No transactions yet.</p>
+      </div>
+
+    </section>
+
+    <section class="quick-actions">
+
+      <div class="action-card">
+        <div class="action-icon"></div>
+
+        <div>
+          <h3>Transfer Money</h3>
+          <p>Send money to anyone</p>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-icon"></div>
+
+        <div>
+          <h3>My Account</h3>
+          <p>View and manage account</p>
+        </div>
+      </div>
+
+      <div class="action-card">
+        <div class="action-icon"></div>
+
+        <div>
+          <h3>Statements</h3>
+          <p>View your statements</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
 </div>
