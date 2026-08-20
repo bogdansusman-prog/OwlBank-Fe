@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TokenService } from '../services/token';
 import { AuthService } from '../services/auth';
 
 @Component({
@@ -22,7 +21,6 @@ export class Login {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private tokenService: TokenService
   ) {}
 
   onSubmit(): void {
@@ -43,7 +41,7 @@ export class Login {
       next: (token: string) => {
   this.isLoading = false;
 
-  this.tokenService.setToken(token);
+  localStorage.setItem("token" , token);
 
   this.router.navigate(['/home']);
 },
