@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -13,6 +13,23 @@ export class UserService{
             responseType: 'text'
         }).pipe(
             map(response => Number(response))
+        );
+    }
+    deposit(
+        amount: number,
+        description: string
+    ): Observable<string>{
+        const params = new HttpParams()
+        .set('Amount', amount.toString())
+        .set('Description', description);
+
+        return this.http.post(
+            '/api/users/deposit',
+            null,
+            {
+                params,
+                responseType: 'text'
+            }
         );
     }
 }
