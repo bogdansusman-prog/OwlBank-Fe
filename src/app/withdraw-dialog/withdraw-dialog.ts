@@ -1,93 +1,69 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-
-import {
+import{
   MatDialogModule,
   MatDialogRef
 } from '@angular/material/dialog';
-
 import { MatIconModule } from '@angular/material/icon';
-
 import { UserService } from '../services/user';
 
 @Component({
-  selector: 'app-deposit-dialog',
-  imports: [
+  selector: 'app-withdraw-dialog',
+  imports:[
     FormsModule,
     MatDialogModule,
     MatIconModule
   ],
-  templateUrl: './deposit-dialog.html',
-  styleUrl: './deposit-dialog.css'
+  templateUrl: './withdraw-dialog.html',
+  styleUrl: './withdraw-dialog.css'
 })
-export class DepositDialog {
-
+export class WithdrawDialog {
   amount: number | null = null;
-
+  description = '';
   isLoading = false;
   errorMessage = '';
-  description = '';
-  constructor(
-    private dialogRef: MatDialogRef<DepositDialog>,
-    private userService: UserService
-  ) {}
 
-  deposit(): void {
+  constructor(
+    private dialogRef: MatDialogRef<WithdrawDialog>,
+    private userService: UserService
+  ){}
+
+  withdraw():void {
     this.errorMessage = '';
 
-    if (
-      this.amount === null ||
-      this.amount <= 0
-    ) {
-      this.errorMessage =
-        'Please enter a valid amount.';
+    if(this.amount === null || this.amount <= 0){
+        this.errorMessage = 'Please enter a valid amount.';
       return;
     }
-
     if(!this.description.trim()){
-      this.errorMessage =
-        'Please enter a description.';
-        return;
+        this.errorMessage = 'Please enter a description.';
+      return;
     }
-
     this.isLoading = true;
 
-    this.userService.deposit(
+    this.userService.withdraw(
       this.amount,
-      this.description
+      this.description.trim()
     ).subscribe({
-
-      next: () => {
+      next:() => {
         this.isLoading = false;
-
         this.dialogRef.close(true);
       },
-
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;
 
-        if (error.status === 401) {
-          this.errorMessage =
-            'Your session has expired. Please log in again.';
+        if(error.status === 401){
+          this.errorMessage = 
+          'Your session has expired. Please retry.'
           return;
         }
-
-        this.errorMessage =
-          'Deposit failed. Please try again.';
+        this.errorMessage = 'Withdrawal failed. Please try again.'
       }
     });
   }
-
-  cancel(): void {
+  cancel(): void{
     this.dialogRef.close(false);
+    
   }
 }
-
-
-
-
-
-
-
-

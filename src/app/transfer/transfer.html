@@ -55,6 +55,12 @@
       </div>
     }
 
+    @if (withdrawSuccess) {
+      <div class="success-message">
+        <mat-icon>check_circle</mat-icon>
+        <span>Withdrawal completed successfully.</span>
+      </div>
+    }
 
     <section class="transfer-options">
 
@@ -103,6 +109,31 @@
         </mat-icon>
 
       </button>
+
+      <button
+  type="button"
+  class="transfer-card withdraw-card"
+  (mousemove)="onButtonMouseMove($event)"
+  (click)="openWithdraw()"
+>
+
+  <div class="card-icon">
+    <mat-icon>payments</mat-icon>
+  </div>
+
+  <div class="card-content">
+    <h2>Withdraw Money</h2>
+
+    <p>
+      Withdraw money from your OwlBank account
+    </p>
+  </div>
+
+  <mat-icon class="arrow">
+    chevron_right
+  </mat-icon>
+
+</button>
 
     </section>
 

@@ -32,4 +32,38 @@ export class UserService{
             }
         );
     }
+    withdraw(
+        amount: number,
+        description: string
+    ): Observable<string>{
+        const params = new HttpParams()
+        .set('Amount', amount.toString())
+        .set('Description', description);
+
+        return this.http.post(
+            '/api/users/withdraw',
+            null,
+            {
+                params,
+                responseType: 'text'
+            }
+        );
+    }
+    transferMoney(
+  phoneNumber: string,
+  amount: number
+): Observable<string> {
+
+  const params = new HttpParams()
+    .set('amount', amount.toString());
+
+  return this.http.post(
+    `/api/users/transfer/${encodeURIComponent(phoneNumber)}`,
+    null,
+    {
+      params,
+      responseType: 'text'
+    }
+  );
+}
 }

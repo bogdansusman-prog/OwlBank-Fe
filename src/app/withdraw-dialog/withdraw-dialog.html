@@ -1,0 +1,84 @@
+<div class="withdraw-dialog">
+
+  <button
+    type="button"
+    class="close-button"
+    (click)="cancel()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <div class="dialog-icon">
+    <mat-icon>payments</mat-icon>
+  </div>
+
+  <h2>Withdraw Money</h2>
+
+  <p class="subtitle">
+    Withdraw money from your OwlBank account
+  </p>
+
+  <div class="form-group">
+    <label for="withdrawAmount">
+      Amount
+    </label>
+
+    <div class="amount-input">
+      <span>$</span>
+
+      <input
+        id="withdrawAmount"
+        type="number"
+        [(ngModel)]="amount"
+        placeholder="0.00"
+        min="0.01"
+        step="0.01"
+      >
+    </div>
+  </div>
+
+  <div class="form-group description-group">
+    <label for="withdrawDescription">
+      Description
+    </label>
+
+    <input
+      id="withdrawDescription"
+      type="text"
+      [(ngModel)]="description"
+      placeholder="e.g. Shopping"
+      maxlength="100"
+    >
+  </div>
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+      [disabled]="isLoading"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="button"
+      class="withdraw-button"
+      (click)="withdraw()"
+      [disabled]="isLoading"
+    >
+      <mat-icon>remove</mat-icon>
+
+      {{ isLoading ? 'Withdrawing...' : 'Withdraw' }}
+    </button>
+
+  </div>
+
+</div>

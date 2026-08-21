@@ -9,6 +9,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 
 import { DepositDialog } from '../deposit-dialog/deposit-dialog';
+import { WithdrawDialog } from '../withdraw-dialog/withdraw-dialog';
 
 @Component({
   selector: 'app-transfer',
@@ -23,6 +24,7 @@ import { DepositDialog } from '../deposit-dialog/deposit-dialog';
 export class Transfer {
 
   depositSuccess = false;
+  withdrawSuccess = false;
 
   constructor(
     private dialog: MatDialog
@@ -39,6 +41,23 @@ export class Transfer {
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.depositSuccess = true;
+        this.withdrawSuccess = false;
+      }
+    });
+  }
+
+  openWithdraw(): void {
+    const dialogRef = this.dialog.open(
+      WithdrawDialog,
+      {
+        panelClass: 'owlbank-dialog'
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.withdrawSuccess = true;
+        this.depositSuccess = false;
       }
     });
   }
