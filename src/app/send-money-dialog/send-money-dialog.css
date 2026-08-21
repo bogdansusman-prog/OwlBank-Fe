@@ -1,0 +1,554 @@
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   DIALOG
+========================= */
+
+.send-money-dialog {
+  position: relative;
+
+  width: min(92vw, 520px);
+  min-height: 460px;
+  max-height: 90dvh;
+
+  padding: 38px 42px;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(124, 58, 237, 0.18),
+      transparent 38%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(17, 24, 39, 0.98),
+      rgba(8, 13, 28, 0.98)
+    );
+
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  border-radius: 24px;
+
+  overflow-y: auto;
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.55),
+    0 0 45px rgba(124, 58, 237, 0.15);
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.close-button {
+  position: absolute;
+
+  top: 18px;
+  right: 18px;
+
+  width: 38px;
+  height: 38px;
+
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #8f97aa;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.close-button mat-icon {
+  width: 21px;
+  height: 21px;
+
+  font-size: 21px;
+}
+
+.close-button:hover {
+  color: #ffffff;
+
+  background: rgba(124, 58, 237, 0.14);
+
+  border-color: rgba(139, 92, 246, 0.35);
+
+  transform: rotate(5deg);
+}
+
+
+/* =========================
+   DIALOG ICON
+========================= */
+
+.dialog-icon {
+  width: 72px;
+  height: 72px;
+
+  margin: 2px auto 20px;
+
+  display: grid;
+  place-items: center;
+
+  color: #c4b5fd;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.45),
+      rgba(91, 33, 182, 0.2)
+    );
+
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: 20px;
+
+  box-shadow:
+    0 0 30px rgba(124, 58, 237, 0.18),
+    inset 0 0 18px rgba(139, 92, 246, 0.08);
+}
+
+.dialog-icon mat-icon {
+  width: 34px;
+  height: 34px;
+
+  font-size: 34px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.send-money-dialog h2 {
+  margin: 0;
+
+  text-align: center;
+
+  font-size: 28px;
+  font-weight: 650;
+
+  letter-spacing: -0.4px;
+}
+
+.subtitle {
+  margin: 8px 0 30px;
+
+  text-align: center;
+
+  color: #858da0;
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #c5cad5;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+/* =========================
+   PHONE INPUT
+========================= */
+
+.phone-input {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  background: rgba(6, 11, 24, 0.82);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 13px;
+
+  overflow: hidden;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.phone-input:focus-within {
+  border-color: rgba(139, 92, 246, 0.65);
+
+  background: rgba(8, 13, 28, 0.95);
+
+  box-shadow:
+    0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.phone-input mat-icon {
+  flex-shrink: 0;
+
+  width: 21px;
+  height: 21px;
+
+  margin-left: 15px;
+
+  color: #a78bfa;
+
+  font-size: 21px;
+}
+
+.phone-input input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 15px 16px 15px 10px;
+
+  color: #ffffff;
+
+  background: transparent;
+
+  border: none;
+  outline: none;
+
+  font-size: 16px;
+}
+
+.phone-input input::placeholder {
+  color: #555e72;
+}
+
+
+/* =========================
+   AMOUNT INPUT
+========================= */
+
+.amount-input {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  background: rgba(6, 11, 24, 0.82);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 13px;
+
+  overflow: hidden;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.amount-input:focus-within {
+  border-color: rgba(139, 92, 246, 0.65);
+
+  background: rgba(8, 13, 28, 0.95);
+
+  box-shadow:
+    0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.amount-input span {
+  padding-left: 16px;
+
+  color: #a78bfa;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.amount-input input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 15px 16px 15px 8px;
+
+  color: #ffffff;
+
+  background: transparent;
+
+  border: none;
+  outline: none;
+
+  font-size: 18px;
+}
+
+.amount-input input::placeholder {
+  color: #555e72;
+}
+
+
+/* remove number arrows */
+
+.amount-input input::-webkit-outer-spin-button,
+.amount-input input::-webkit-inner-spin-button {
+  margin: 0;
+
+  appearance: none;
+}
+
+.amount-input input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+
+.error-message {
+  margin: 4px 0 18px;
+
+  padding: 11px 13px;
+
+  color: #fca5a5;
+
+  background: rgba(239, 68, 68, 0.08);
+
+  border: 1px solid rgba(239, 68, 68, 0.18);
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  text-align: center;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.dialog-actions {
+  margin-top: 28px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.cancel-button,
+.send-button {
+  min-height: 50px;
+
+  padding: 0 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+/* =========================
+   CANCEL BUTTON
+========================= */
+
+.cancel-button {
+  color: #adb4c4;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cancel-button:hover:not(:disabled) {
+  color: #ffffff;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+.send-button {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #9333ea
+    );
+
+  border: 1px solid rgba(167, 139, 250, 0.35);
+
+  box-shadow:
+    0 8px 22px rgba(124, 58, 237, 0.25);
+}
+
+.send-button mat-icon {
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+}
+
+.send-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #a855f7
+    );
+
+  box-shadow:
+    0 12px 28px rgba(124, 58, 237, 0.35),
+    0 0 24px rgba(139, 92, 246, 0.18);
+}
+
+.send-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+
+/* =========================
+   DISABLED
+========================= */
+
+.cancel-button:disabled,
+.send-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 550px) {
+
+  .send-money-dialog {
+    width: 92vw;
+    min-height: auto;
+
+    padding: 32px 22px 24px;
+
+    border-radius: 20px;
+  }
+
+  .close-button {
+    top: 14px;
+    right: 14px;
+  }
+
+  .dialog-icon {
+    width: 64px;
+    height: 64px;
+
+    margin-bottom: 17px;
+  }
+
+  .dialog-icon mat-icon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 30px;
+  }
+
+  .send-money-dialog h2 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    margin-bottom: 24px;
+
+    font-size: 13px;
+  }
+
+  .dialog-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .cancel-button,
+  .send-button {
+    width: 100%;
+  }
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 380px) {
+
+  .send-money-dialog {
+    width: 94vw;
+
+    padding: 28px 18px 20px;
+  }
+
+  .send-money-dialog h2 {
+    font-size: 22px;
+  }
+
+  .phone-input input {
+    font-size: 15px;
+  }
+
+  .amount-input input {
+    font-size: 17px;
+  }
+}

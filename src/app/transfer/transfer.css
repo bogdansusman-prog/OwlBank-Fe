@@ -10,7 +10,7 @@
 
 /*  
    PAGE
-  */
+*/
 
 .transfer-page {
   min-height: 100dvh;
@@ -31,7 +31,7 @@
 
 /*  
    NAVBAR
-  */
+*/
 
 .navbar {
   width: 100%;
@@ -70,7 +70,7 @@
 
 /*  
    NAV LINKS
-  */
+*/
 
 .nav-links {
   flex: 1;
@@ -127,7 +127,7 @@
 
 /*  
    PROFILE
-  */
+*/
 
 .profile-button {
   flex-shrink: 0;
@@ -177,7 +177,7 @@
 
 /*  
    CONTAINER
-  */
+*/
 
 .transfer-container {
   width: 100%;
@@ -189,7 +189,7 @@
 
 /*  
    PAGE HEADER
-  */
+*/
 
 .page-header {
   text-align: center;
@@ -247,7 +247,7 @@
 
 /*  
    SUCCESS MESSAGE
-  */
+*/
 
 .success-message {
   width: min(100%, 600px);
@@ -273,7 +273,7 @@
 
 /*  
    OPTIONS
-  */
+*/
 
 .transfer-options {
   display: grid;
@@ -287,7 +287,7 @@
 
 /*  
    CARD BASE
-  */
+*/
 
 .transfer-card {
   position: relative;
@@ -314,9 +314,10 @@
 
 
 /*  
-   DEPOSIT + WITHDRAW
-  */
+   SEND + DEPOSIT + WITHDRAW
+*/
 
+.send-card,
 .deposit-card,
 .withdraw-card {
   --mouse-x: 50%;
@@ -334,6 +335,7 @@
     box-shadow 0.25s ease;
 }
 
+.send-card:hover,
 .deposit-card:hover,
 .withdraw-card:hover {
   background:
@@ -359,21 +361,8 @@
 
 
 /*  
-   DISABLED / SEND MONEY
-  */
-
-.disabled-card {
-  background: rgba(13, 18, 34, 0.55);
-
-  opacity: 0.65;
-
-  cursor: default;
-}
-
-
-/*  
    CARD ICON
-  */
+*/
 
 .card-icon {
   flex-shrink: 0;
@@ -412,6 +401,7 @@
   font-size: 31px;
 }
 
+.send-card:hover .card-icon,
 .deposit-card:hover .card-icon,
 .withdraw-card:hover .card-icon {
   transform: scale(1.08);
@@ -424,7 +414,7 @@
 
 /*  
    CARD CONTENT
-  */
+*/
 
 .card-content {
   flex: 1;
@@ -450,7 +440,7 @@
 
 /*  
    ARROW
-  */
+*/
 
 .arrow {
   flex-shrink: 0;
@@ -461,6 +451,7 @@
     transform 0.25s ease;
 }
 
+.send-card:hover .arrow,
 .deposit-card:hover .arrow,
 .withdraw-card:hover .arrow {
   transform: translateX(5px);
@@ -468,36 +459,8 @@
 
 
 /*  
-   COMING SOON
-  */
-
-.coming-soon {
-  position: absolute;
-
-  top: 17px;
-  right: 17px;
-
-  padding: 6px 10px;
-
-  color: #8b93a7;
-
-  background: rgba(255, 255, 255, 0.04);
-
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 999px;
-
-  font-size: 11px;
-  font-weight: 600;
-
-  text-transform: uppercase;
-
-  letter-spacing: 0.5px;
-}
-
-
-/*  
    MEDIUM SCREEN
-  */
+*/
 
 @media (max-width: 1050px) {
 
@@ -505,16 +468,12 @@
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
-
-  .disabled-card {
-    grid-column: 1 / -1;
-  }
 }
 
 
 /*  
    TABLET
-  */
+*/
 
 @media (max-width: 800px) {
 
@@ -535,16 +494,12 @@
   .transfer-options {
     grid-template-columns: 1fr;
   }
-
-  .disabled-card {
-    grid-column: auto;
-  }
 }
 
 
 /*  
    MOBILE
-  */
+*/
 
 @media (max-width: 650px) {
 
@@ -629,7 +584,7 @@
 
 /*  
    SMALL MOBILE
-  */
+*/
 
 @media (max-width: 380px) {
 

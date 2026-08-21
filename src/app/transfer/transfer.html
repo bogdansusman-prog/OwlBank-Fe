@@ -25,7 +25,10 @@
       </a>
     </div>
 
-    <button class="profile-button" type="button">
+    <button
+      class="profile-button"
+      type="button"
+    >
       <mat-icon>account_circle</mat-icon>
     </button>
   </nav>
@@ -48,23 +51,50 @@
     </div>
 
 
+    @if (transferSuccess) {
+      <div class="success-message">
+        <mat-icon>check_circle</mat-icon>
+
+        <span>
+          Transfer completed successfully.
+        </span>
+      </div>
+    }
+
+
     @if (depositSuccess) {
       <div class="success-message">
         <mat-icon>check_circle</mat-icon>
-        <span>Deposit completed successfully.</span>
+
+        <span>
+          Deposit completed successfully.
+        </span>
       </div>
     }
+
 
     @if (withdrawSuccess) {
       <div class="success-message">
         <mat-icon>check_circle</mat-icon>
-        <span>Withdrawal completed successfully.</span>
+
+        <span>
+          Withdrawal completed successfully.
+        </span>
       </div>
     }
 
+
     <section class="transfer-options">
 
-      <div class="transfer-card disabled-card">
+
+      <!-- SEND MONEY -->
+
+      <button
+        type="button"
+        class="transfer-card send-card"
+        (mousemove)="onButtonMouseMove($event)"
+        (click)="openSendMoney()"
+      >
 
         <div class="card-icon">
           <mat-icon>send</mat-icon>
@@ -74,16 +104,18 @@
           <h2>Send Money</h2>
 
           <p>
-            Transfer money to another OwlBank user
+            Transfer money using a phone number
           </p>
         </div>
 
-        <span class="coming-soon">
-          Coming soon
-        </span>
+        <mat-icon class="arrow">
+          chevron_right
+        </mat-icon>
 
-      </div>
+      </button>
 
+
+      <!-- DEPOSIT -->
 
       <button
         type="button"
@@ -110,30 +142,34 @@
 
       </button>
 
+
+      <!-- WITHDRAW -->
+
       <button
-  type="button"
-  class="transfer-card withdraw-card"
-  (mousemove)="onButtonMouseMove($event)"
-  (click)="openWithdraw()"
->
+        type="button"
+        class="transfer-card withdraw-card"
+        (mousemove)="onButtonMouseMove($event)"
+        (click)="openWithdraw()"
+      >
 
-  <div class="card-icon">
-    <mat-icon>payments</mat-icon>
-  </div>
+        <div class="card-icon">
+          <mat-icon>payments</mat-icon>
+        </div>
 
-  <div class="card-content">
-    <h2>Withdraw Money</h2>
+        <div class="card-content">
+          <h2>Withdraw Money</h2>
 
-    <p>
-      Withdraw money from your OwlBank account
-    </p>
-  </div>
+          <p>
+            Withdraw money from your OwlBank account
+          </p>
+        </div>
 
-  <mat-icon class="arrow">
-    chevron_right
-  </mat-icon>
+        <mat-icon class="arrow">
+          chevron_right
+        </mat-icon>
 
-</button>
+      </button>
+
 
     </section>
 
