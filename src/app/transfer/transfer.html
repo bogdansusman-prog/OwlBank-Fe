@@ -1,37 +1,55 @@
 <div class="transfer-page">
 
   <nav class="navbar">
-    <div class="brand">OwlBank</div>
 
-    <div class="nav-links">
-      <a routerLink="/home">
-        <mat-icon>home</mat-icon>
-        <span class="nav-text">Home</span>
-      </a>
+  <div class="brand">
+    OwlBank
+  </div>
+  
+  <a
+  routerLink="/home"
+  class="mobile-current-tab"
+  aria-label="Home"
+>
+  <mat-icon>home</mat-icon>
+</a>
 
-      <a routerLink="/account">
-        <mat-icon>person</mat-icon>
-        <span class="nav-text">Account</span>
-      </a>
+  <!-- DESKTOP + TABLET -->
+  <div class="nav-links">
 
-      <a routerLink="/transfer" class="active">
-        <mat-icon>swap_horiz</mat-icon>
-        <span class="nav-text">Transfer</span>
-      </a>
+    <a routerLink="/home">
+      <mat-icon>home</mat-icon>
+      <span class="nav-text">Home</span>
+    </a>
 
-      <a routerLink="/statements">
-        <mat-icon>description</mat-icon>
-        <span class="nav-text">Statements</span>
-      </a>
-    </div>
+    <a routerLink="/account">
+      <mat-icon>person</mat-icon>
+      <span class="nav-text">Account</span>
+    </a>
 
-    <button
-      class="profile-button"
-      type="button"
+    <a
+      routerLink="/transfer"
+      class="active"
     >
-      <mat-icon>account_circle</mat-icon>
-    </button>
-  </nav>
+      <mat-icon>swap_horiz</mat-icon>
+      <span class="nav-text">Transfer</span>
+    </a>
+
+    <a routerLink="/statements">
+      <mat-icon>description</mat-icon>
+      <span class="nav-text">Statements</span>
+    </a>
+
+  </div>
+
+  <button
+    class="profile-button"
+    type="button"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+</nav>
 
 
   <main class="transfer-container">

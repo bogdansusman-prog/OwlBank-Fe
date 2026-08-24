@@ -1,36 +1,54 @@
 <div class="home-page">
 
   <nav class="navbar">
-    <div class="brand">OwlBank</div>
 
-<div class="nav-links">
-  <a routerLink="/home" class="active">
-    <mat-icon>home</mat-icon>
-    <span class="nav-text">Home</span>
-  </a>
+    <div class="brand">
+      OwlBank
+    </div>
 
-  <a routerLink="/account">
-    <mat-icon>person</mat-icon>
-    <span class="nav-text">Account</span>
-  </a>
 
-  <a routerLink="/transfer">
-    <mat-icon>swap_horiz</mat-icon>
-    <span class="nav-text">Transfer</span>
-  </a>
+    <div class="nav-links">
 
-  <a routerLink="/statements">
-    <mat-icon>description</mat-icon>
-    <span class="nav-text">Statements</span>
-  </a>
-</div>
+      <a
+        routerLink="/home"
+        class="active"
+      >
+        <mat-icon>home</mat-icon>
+        <span class="nav-text">Home</span>
+      </a>
 
-    <button class="profile-button" type="button">
+      <a routerLink="/account">
+        <mat-icon>person</mat-icon>
+        <span class="nav-text">Account</span>
+      </a>
+
+      <a routerLink="/transfer">
+        <mat-icon>swap_horiz</mat-icon>
+        <span class="nav-text">Transfer</span>
+      </a>
+
+      <a routerLink="/statements">
+        <mat-icon>description</mat-icon>
+        <span class="nav-text">Statements</span>
+      </a>
+
+    </div>
+
+
+    <button
+      class="profile-button"
+      type="button"
+    >
       <mat-icon>account_circle</mat-icon>
     </button>
+
   </nav>
 
+
   <main class="dashboard">
+
+
+    <!-- BALANCE -->
 
     <section class="balance-section">
 
@@ -40,16 +58,31 @@
         class="balance-logo balance-logo-left"
       >
 
+
       <div class="balance-card">
-        <p>Available Balance</p>
-          @if (isBalanceLoading) {
+
+        <p>
+          Available Balance
+        </p>
+
+        @if (isBalanceLoading | async) {
+
           <h1>...</h1>
+
         } @else if (balanceError) {
+
           <h1>--</h1>
+
         } @else {
-          <h1>${{ balance.toFixed(2) }}</h1>
+
+          <h1>
+            ${{ balance | async }}
+          </h1>
+
         }
+
       </div>
+
 
       <img
         src="/owlbank-logo.png"
@@ -59,77 +92,115 @@
 
     </section>
 
+
+    <!-- RECENT TRANSACTIONS -->
+
     <section class="transactions-card">
 
       <div class="section-header">
-        <h2>Recent Transactions</h2>
 
-        <button type="button">
+        <h2>
+          Recent Transactions
+        </h2>
+
+        <a
+          routerLink="/statements"
+          class="view-all"
+        >
           View all
-          <mat-icon>chevron_right</mat-icon>
-        </button>
+
+          <mat-icon>
+            chevron_right
+          </mat-icon>
+        </a>
+
       </div>
 
+
       <div class="empty-transactions">
-        <p>No transactions yet.</p>
+
+        <p>
+          No transactions yet.
+        </p>
+
       </div>
 
     </section>
 
+
+    <!-- MOBILE QUICK NAVIGATION -->
+
     <section class="quick-actions">
 
-      <div class="action-card">
+
+      <!-- TRANSFER -->
+
+      <a
+        routerLink="/transfer"
+        class="action-card"
+      >
+
         <div class="action-icon">
           <mat-icon>swap_horiz</mat-icon>
         </div>
 
         <div>
           <h3>Transfer Money</h3>
-          <p>Send money to anyone</p>
-        </div>
-      </div>
 
-      <div class="action-card">
+          <p>
+            Send money to anyone
+          </p>
+        </div>
+
+      </a>
+
+
+      <!-- ACCOUNT -->
+
+      <a
+        routerLink="/account"
+        class="action-card"
+      >
+
         <div class="action-icon">
           <mat-icon>person</mat-icon>
         </div>
 
         <div>
           <h3>My Account</h3>
-          <p>View and manage account</p>
-        </div>
-      </div>
 
-      <div class="action-card">
+          <p>
+            View and manage account
+          </p>
+        </div>
+
+      </a>
+
+
+      <!-- STATEMENTS -->
+
+      <a
+        routerLink="/statements"
+        class="action-card"
+      >
+
         <div class="action-icon">
           <mat-icon>description</mat-icon>
         </div>
 
         <div>
           <h3>Statements</h3>
-          <p>View your statements</p>
+
+          <p>
+            View your statements
+          </p>
         </div>
-      </div>
+
+      </a>
+
 
     </section>
 
   </main>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
