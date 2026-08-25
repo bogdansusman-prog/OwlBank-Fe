@@ -1,0 +1,785 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.transfer-page {
+  min-height: 100dvh;
+
+  padding: 18px 24px 40px;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(124, 58, 237, 0.14),
+      transparent 35%
+    ),
+    #060b18;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  width: 100%;
+  max-width: 1450px;
+  min-height: 72px;
+
+  margin: 0 auto;
+  padding: 0 28px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 36px;
+
+  background:
+    rgba(13, 18, 34, 0.85);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.25),
+    0 0 25px rgba(124, 58, 237, 0.04);
+}
+
+.brand {
+  flex-shrink: 0;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* =========================
+   MOBILE HOME BUTTON
+========================= */
+
+.mobile-current-tab {
+  display: none;
+
+  text-decoration: none;
+}
+
+
+/* =========================
+   NAV LINKS
+========================= */
+
+.nav-links {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.nav-links a {
+  padding: 11px 16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #969db0;
+
+  text-decoration: none;
+
+  border-radius: 10px;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.nav-links mat-icon {
+  flex-shrink: 0;
+
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+}
+
+.nav-links a:hover {
+  color: #ddd6fe;
+
+  background:
+    rgba(124, 58, 237, 0.1);
+}
+
+.nav-links a.active {
+  color: #c4b5fd;
+
+  background:
+    rgba(124, 58, 237, 0.18);
+
+  box-shadow:
+    inset 0 0 14px
+    rgba(124, 58, 237, 0.08);
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-button {
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #a5adbd;
+
+  background:
+    rgba(255, 255, 255, 0.02);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.13);
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.profile-button mat-icon {
+  width: 28px;
+  height: 28px;
+
+  font-size: 28px;
+}
+
+.profile-button:hover {
+  color: #c4b5fd;
+
+  border-color:
+    rgba(139, 92, 246, 0.55);
+
+  background:
+    rgba(124, 58, 237, 0.1);
+
+  box-shadow:
+    0 0 18px
+    rgba(124, 58, 237, 0.15);
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.transfer-container {
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 70px auto 0;
+}
+
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.page-header {
+  text-align: center;
+
+  margin-bottom: 42px;
+}
+
+.header-icon {
+  width: 70px;
+  height: 70px;
+
+  margin: 0 auto 18px;
+
+  display: grid;
+  place-items: center;
+
+  color: #c4b5fd;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.42),
+      rgba(91, 33, 182, 0.18)
+    );
+
+  border:
+    1px solid rgba(139, 92, 246, 0.25);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 0 30px
+    rgba(124, 58, 237, 0.15);
+}
+
+.header-icon mat-icon {
+  width: 34px;
+  height: 34px;
+
+  font-size: 34px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  font-size:
+    clamp(30px, 5vw, 42px);
+
+  font-weight: 650;
+}
+
+.page-header p {
+  margin: 9px 0 0;
+
+  color: #858da0;
+
+  font-size: 16px;
+}
+
+
+/* =========================
+   SUCCESS MESSAGE
+========================= */
+
+.success-message {
+  width: min(100%, 600px);
+
+  margin: 0 auto 24px;
+
+  padding: 14px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  color: #4ade80;
+
+  background:
+    rgba(34, 197, 94, 0.07);
+
+  border:
+    1px solid rgba(34, 197, 94, 0.18);
+
+  border-radius: 12px;
+}
+
+
+/* =========================
+   OPTIONS
+========================= */
+
+.transfer-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+}
+
+
+/* =========================
+   CARD BASE
+========================= */
+
+.transfer-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 190px;
+
+  padding: 28px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+
+  text-align: left;
+
+  color: #ffffff;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+   SEND + DEPOSIT + WITHDRAW
+========================= */
+
+.send-card,
+.deposit-card,
+.withdraw-card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+
+  appearance: none;
+
+  background:
+    rgba(13, 18, 34, 0.92);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.send-card:hover,
+.deposit-card:hover,
+.withdraw-card:hover {
+  background:
+    radial-gradient(
+      circle 420px
+      at var(--mouse-x) var(--mouse-y),
+
+      rgba(232, 121, 249, 0.34) 0%,
+      rgba(192, 38, 211, 0.24) 28%,
+      rgba(139, 92, 246, 0.20) 52%,
+      transparent 75%
+    ),
+    rgba(13, 18, 34, 0.96);
+
+  transform:
+    translateY(-5px);
+
+  border-color:
+    rgba(168, 85, 247, 0.5);
+
+  box-shadow:
+    0 16px 35px
+    rgba(0, 0, 0, 0.3),
+    0 0 28px
+    rgba(124, 58, 237, 0.18);
+}
+
+
+/* =========================
+   CARD ICON
+========================= */
+
+.card-icon {
+  flex-shrink: 0;
+
+  width: 68px;
+  height: 68px;
+
+  display: grid;
+  place-items: center;
+
+  color: #c4b5fd;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.42),
+      rgba(91, 33, 182, 0.2)
+    );
+
+  border:
+    1px solid rgba(139, 92, 246, 0.18);
+
+  box-shadow:
+    inset 0 0 20px
+    rgba(139, 92, 246, 0.08);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.card-icon mat-icon {
+  width: 31px;
+  height: 31px;
+
+  font-size: 31px;
+}
+
+.send-card:hover .card-icon,
+.deposit-card:hover .card-icon,
+.withdraw-card:hover .card-icon {
+  transform:
+    scale(1.08);
+
+  box-shadow:
+    0 0 25px
+    rgba(139, 92, 246, 0.2),
+    inset 0 0 20px
+    rgba(139, 92, 246, 0.12);
+}
+
+
+/* =========================
+   CARD CONTENT
+========================= */
+
+.card-content {
+  flex: 1;
+}
+
+.card-content h2 {
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.card-content p {
+  margin: 7px 0 0;
+
+  color: #858da0;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   ARROW
+========================= */
+
+.arrow {
+  flex-shrink: 0;
+
+  color: #a78bfa;
+
+  transition:
+    transform 0.25s ease;
+}
+
+.send-card:hover .arrow,
+.deposit-card:hover .arrow,
+.withdraw-card:hover .arrow {
+  transform:
+    translateX(5px);
+}
+
+
+/* =========================
+   MEDIUM SCREEN
+========================= */
+
+@media (max-width: 1050px) {
+
+  .transfer-options {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 800px) {
+
+  .navbar {
+    gap: 18px;
+  }
+
+  .nav-links a {
+    padding: 10px 11px;
+
+    font-size: 14px;
+  }
+
+  .transfer-container {
+    margin-top: 50px;
+  }
+
+  .transfer-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+  .transfer-page {
+    padding:
+      12px 12px 30px;
+  }
+
+
+  /* NAVBAR */
+
+  .navbar {
+    position: relative;
+
+    min-height: 64px;
+
+    padding: 0 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+  }
+
+
+  /* HIDE DESKTOP TABS */
+
+  .nav-links {
+    display: none;
+  }
+
+
+  /* OWLBANK LEFT */
+
+  .brand {
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 19px;
+  }
+
+
+  /* HOME BUTTON CENTER */
+
+  .mobile-current-tab {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 44px;
+    height: 44px;
+
+    display: grid;
+    place-items: center;
+
+    color: #c4b5fd;
+
+    text-decoration: none;
+
+    background:
+      rgba(124, 58, 237, 0.22);
+
+    border:
+      1px solid
+      rgba(139, 92, 246, 0.25);
+
+    border-radius: 12px;
+
+    transform:
+      translate(-50%, -50%);
+
+    box-shadow:
+      0 0 18px
+      rgba(124, 58, 237, 0.12);
+
+    transition:
+      transform 0.18s ease,
+      background 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+
+  .mobile-current-tab mat-icon {
+    width: 24px;
+    height: 24px;
+
+    font-size: 24px;
+  }
+
+  .mobile-current-tab:hover {
+    background:
+      rgba(124, 58, 237, 0.3);
+
+    border-color:
+      rgba(139, 92, 246, 0.45);
+
+    box-shadow:
+      0 0 22px
+      rgba(124, 58, 237, 0.18);
+  }
+
+  .mobile-current-tab:active {
+    transform:
+      translate(-50%, -50%)
+      scale(0.94);
+  }
+
+
+  /* PROFILE RIGHT */
+
+  .profile-button {
+    position: relative;
+
+    z-index: 2;
+
+    width: 40px;
+    height: 40px;
+  }
+
+
+  /* PAGE */
+
+  .transfer-container {
+    margin-top: 40px;
+  }
+
+  .page-header {
+    margin-bottom: 28px;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+
+  /* CARDS */
+
+  .transfer-card {
+    min-height: 160px;
+
+    padding: 22px;
+
+    gap: 15px;
+  }
+
+  .card-icon {
+    width: 58px;
+    height: 58px;
+  }
+
+  .card-content h2 {
+    font-size: 18px;
+  }
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 380px) {
+
+  .transfer-page {
+    padding-inline: 8px;
+  }
+
+  .navbar {
+    padding-inline: 9px;
+  }
+
+  .brand {
+    font-size: 17px;
+  }
+
+
+  /* HOME BUTTON */
+
+  .mobile-current-tab {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mobile-current-tab mat-icon {
+    width: 22px;
+    height: 22px;
+
+    font-size: 22px;
+  }
+
+
+  /* PROFILE */
+
+  .profile-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .profile-button mat-icon {
+    width: 25px;
+    height: 25px;
+
+    font-size: 25px;
+  }
+
+
+  /* CARDS */
+
+  .transfer-card {
+    min-height: 145px;
+
+    padding: 18px;
+
+    gap: 12px;
+  }
+
+  .card-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .card-icon mat-icon {
+    width: 27px;
+    height: 27px;
+
+    font-size: 27px;
+  }
+
+  .card-content h2 {
+    font-size: 17px;
+  }
+
+  .card-content p {
+    font-size: 13px;
+  }
+}

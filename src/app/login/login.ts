@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -9,17 +11,60 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './login.css'
 })
 export class Login {
-  username = '';
+
+  email = '';
   password = '';
 
-  constructor(private router: Router) {}
+  errorMessage = '';
+  isLoading = false;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
   onSubmit(): void {
-    if (!this.username.trim() || !this.password.trim()) {
+    this.errorMessage = '';
+
+    if (!this.email.trim() || !this.password) {
+      this.errorMessage = 'Please complete all fields.';
       return;
     }
 
-    this.router.navigate(['/home']);
+    this.isLoading = true;
+
+    this.authService.login(
+      this.email,
+      this.password
+    ).subscribe({
+
+      next: (token: string) => {
+  this.isLoading = false;
+
+  localStorage.setItem("token" , token);
+
+  this.router.navigate(['/home']);
+},
+
+      error: (error: HttpErrorResponse) => {
+        this.isLoading = false;
+
+        if (error.status === 0) {
+          this.errorMessage = 'Cannot connect to the server.';
+          return;
+        }
+
+        if (
+          typeof error.error === 'string' &&
+          error.error.trim()
+        ) {
+          this.errorMessage = error.error;
+          return;
+        }
+
+        this.errorMessage = 'Invalid email or password.';
+      }
+    });
   }
 
   onButtonMouseMove(event: MouseEvent): void {

@@ -1,19 +1,32 @@
 <div class="login-page">
+
+  <img
+    src="/owlbank-logo.png"
+    alt="OwlBank Logo"
+    class="owlbank-logo"
+  >
+
   <div class="login-card">
     <h1>OwlBank</h1>
     <p class="subtitle">Log in to your account</p>
 
-    <form (ngSubmit)="onSubmit()">
+    <form
+      #loginForm="ngForm"
+      (ngSubmit)="onSubmit()"
+    >
+
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="email">Email</label>
 
         <input
-          id="username"
-          type="text"
-          name="username"
-          [(ngModel)]="username"
-          placeholder="Enter your username"
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="Enter your email"
+          autocomplete="email"
           required
+          email
         />
       </div>
 
@@ -26,22 +39,38 @@
           name="password"
           [(ngModel)]="password"
           placeholder="Enter your password"
+          autocomplete="current-password"
           required
         />
       </div>
+
+      <p class="forgot-password">
+        <a routerLink="/reset-password">
+          Forgot password?
+        </a>
+      </p>
+
+      @if (errorMessage) {
+        <p class="error-message">
+          {{ errorMessage }}
+        </p>
+      }
 
       <button
         type="submit"
         class="login-button"
         (mousemove)="onButtonMouseMove($event)"
+        [disabled]="loginForm.invalid || isLoading"
       >
-        Log in
+        {{ isLoading ? 'Logging in...' : 'Log in' }}
       </button>
 
       <p class="register-link">
         Don't have an account?
         <a routerLink="/register">Create one here</a>
       </p>
+
     </form>
   </div>
+
 </div>

@@ -1,0 +1,111 @@
+<div class="send-money-dialog">
+
+  <button
+    type="button"
+    class="close-button"
+    (click)="cancel()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
+
+  <div class="dialog-icon">
+    <mat-icon>send</mat-icon>
+  </div>
+
+
+  <h2>Send Money</h2>
+
+  <p class="subtitle">
+    Transfer money to another OwlBank user
+  </p>
+
+
+  <div class="form-group">
+
+    <label for="phoneNumber">
+      Phone Number
+    </label>
+
+    <div class="phone-input">
+
+      <mat-icon>phone</mat-icon>
+
+      <input
+        id="phoneNumber"
+        type="tel"
+        [(ngModel)]="phoneNumber"
+        placeholder="e.g. 0712345678"
+        autocomplete="tel"
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="transferAmount">
+      Amount
+    </label>
+
+    <div class="amount-input">
+
+      <span>$</span>
+
+      <input
+        id="transferAmount"
+        type="number"
+        [(ngModel)]="amount"
+        placeholder="0.00"
+        min="0.01"
+        step="0.01"
+      >
+
+    </div>
+
+  </div>
+
+
+  @if (errorMessage) {
+
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+
+  }
+
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+      [disabled]="isLoading"
+    >
+      Cancel
+    </button>
+
+
+    <button
+      type="button"
+      class="send-button"
+      (click)="sendMoney()"
+      [disabled]="isLoading"
+    >
+
+      <mat-icon>send</mat-icon>
+
+      {{
+        isLoading
+          ? 'Sending...'
+          : 'Send Money'
+      }}
+
+    </button>
+
+  </div>
+
+</div>

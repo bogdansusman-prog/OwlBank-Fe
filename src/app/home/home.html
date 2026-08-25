@@ -1,4 +1,206 @@
 <div class="home-page">
-  <h1>Welcome to OwlBank</h1>
-  <p>You have logged in successfully.</p>
+
+  <nav class="navbar">
+
+    <div class="brand">
+      OwlBank
+    </div>
+
+
+    <div class="nav-links">
+
+      <a
+        routerLink="/home"
+        class="active"
+      >
+        <mat-icon>home</mat-icon>
+        <span class="nav-text">Home</span>
+      </a>
+
+      <a routerLink="/account">
+        <mat-icon>person</mat-icon>
+        <span class="nav-text">Account</span>
+      </a>
+
+      <a routerLink="/transfer">
+        <mat-icon>swap_horiz</mat-icon>
+        <span class="nav-text">Transfer</span>
+      </a>
+
+      <a routerLink="/statements">
+        <mat-icon>description</mat-icon>
+        <span class="nav-text">Statements</span>
+      </a>
+
+    </div>
+
+
+    <button
+      class="profile-button"
+      type="button"
+    >
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+  </nav>
+
+
+  <main class="dashboard">
+
+
+    <!-- BALANCE -->
+
+    <section class="balance-section">
+
+      <img
+        src="/owlbank-logo.png"
+        alt="OwlBank"
+        class="balance-logo balance-logo-left"
+      >
+
+
+      <div class="balance-card">
+
+        <p>
+          Available Balance
+        </p>
+
+        @if (isBalanceLoading | async) {
+
+          <h1>...</h1>
+
+        } @else if (balanceError) {
+
+          <h1>--</h1>
+
+        } @else {
+
+          <h1>
+            ${{ balance | async }}
+          </h1>
+
+        }
+
+      </div>
+
+
+      <img
+        src="/owlbank-logo.png"
+        alt="OwlBank"
+        class="balance-logo balance-logo-right"
+      >
+
+    </section>
+
+
+    <!-- RECENT TRANSACTIONS -->
+
+    <section class="transactions-card">
+
+      <div class="section-header">
+
+        <h2>
+          Recent Transactions
+        </h2>
+
+        <a
+          routerLink="/statements"
+          class="view-all"
+        >
+          View all
+
+          <mat-icon>
+            chevron_right
+          </mat-icon>
+        </a>
+
+      </div>
+
+
+      <div class="empty-transactions">
+
+        <p>
+          No transactions yet.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- MOBILE QUICK NAVIGATION -->
+
+    <section class="quick-actions">
+
+
+      <!-- TRANSFER -->
+
+      <a
+        routerLink="/transfer"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          <mat-icon>swap_horiz</mat-icon>
+        </div>
+
+        <div>
+          <h3>Transfer Money</h3>
+
+          <p>
+            Send money to anyone
+          </p>
+        </div>
+
+      </a>
+
+
+      <!-- ACCOUNT -->
+
+      <a
+        routerLink="/account"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          <mat-icon>person</mat-icon>
+        </div>
+
+        <div>
+          <h3>My Account</h3>
+
+          <p>
+            View and manage account
+          </p>
+        </div>
+
+      </a>
+
+
+      <!-- STATEMENTS -->
+
+      <a
+        routerLink="/statements"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+
+        <div>
+          <h3>Statements</h3>
+
+          <p>
+            View your statements
+          </p>
+        </div>
+
+      </a>
+
+
+    </section>
+
+  </main>
+
 </div>

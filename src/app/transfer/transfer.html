@@ -1,0 +1,196 @@
+<div class="transfer-page">
+
+  <nav class="navbar">
+
+  <div class="brand">
+    OwlBank
+  </div>
+  
+  <a
+  routerLink="/home"
+  class="mobile-current-tab"
+  aria-label="Home"
+>
+  <mat-icon>home</mat-icon>
+</a>
+
+  <!-- DESKTOP + TABLET -->
+  <div class="nav-links">
+
+    <a routerLink="/home">
+      <mat-icon>home</mat-icon>
+      <span class="nav-text">Home</span>
+    </a>
+
+    <a routerLink="/account">
+      <mat-icon>person</mat-icon>
+      <span class="nav-text">Account</span>
+    </a>
+
+    <a
+      routerLink="/transfer"
+      class="active"
+    >
+      <mat-icon>swap_horiz</mat-icon>
+      <span class="nav-text">Transfer</span>
+    </a>
+
+    <a routerLink="/statements">
+      <mat-icon>description</mat-icon>
+      <span class="nav-text">Statements</span>
+    </a>
+
+  </div>
+
+  <button
+    class="profile-button"
+    type="button"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+</nav>
+
+
+  <main class="transfer-container">
+
+    <div class="page-header">
+
+      <div class="header-icon">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </div>
+
+      <h1>Transfer & Payments</h1>
+
+      <p>
+        Manage how you move your money
+      </p>
+
+    </div>
+
+
+    @if (transferSuccess) {
+      <div class="success-message">
+        <mat-icon>check_circle</mat-icon>
+
+        <span>
+          Transfer completed successfully.
+        </span>
+      </div>
+    }
+
+
+    @if (depositSuccess) {
+      <div class="success-message">
+        <mat-icon>check_circle</mat-icon>
+
+        <span>
+          Deposit completed successfully.
+        </span>
+      </div>
+    }
+
+
+    @if (withdrawSuccess) {
+      <div class="success-message">
+        <mat-icon>check_circle</mat-icon>
+
+        <span>
+          Withdrawal completed successfully.
+        </span>
+      </div>
+    }
+
+
+    <section class="transfer-options">
+
+
+      <!-- SEND MONEY -->
+
+      <button
+        type="button"
+        class="transfer-card send-card"
+        (mousemove)="onButtonMouseMove($event)"
+        (click)="openSendMoney()"
+      >
+
+        <div class="card-icon">
+          <mat-icon>send</mat-icon>
+        </div>
+
+        <div class="card-content">
+          <h2>Send Money</h2>
+
+          <p>
+            Transfer money using a phone number
+          </p>
+        </div>
+
+        <mat-icon class="arrow">
+          chevron_right
+        </mat-icon>
+
+      </button>
+
+
+      <!-- DEPOSIT -->
+
+      <button
+        type="button"
+        class="transfer-card deposit-card"
+        (mousemove)="onButtonMouseMove($event)"
+        (click)="openDeposit()"
+      >
+
+        <div class="card-icon">
+          <mat-icon>add_card</mat-icon>
+        </div>
+
+        <div class="card-content">
+          <h2>Deposit Money</h2>
+
+          <p>
+            Add money to your OwlBank account
+          </p>
+        </div>
+
+        <mat-icon class="arrow">
+          chevron_right
+        </mat-icon>
+
+      </button>
+
+
+      <!-- WITHDRAW -->
+
+      <button
+        type="button"
+        class="transfer-card withdraw-card"
+        (mousemove)="onButtonMouseMove($event)"
+        (click)="openWithdraw()"
+      >
+
+        <div class="card-icon">
+          <mat-icon>payments</mat-icon>
+        </div>
+
+        <div class="card-content">
+          <h2>Withdraw Money</h2>
+
+          <p>
+            Withdraw money from your OwlBank account
+          </p>
+        </div>
+
+        <mat-icon class="arrow">
+          chevron_right
+        </mat-icon>
+
+      </button>
+
+
+    </section>
+
+  </main>
+
+</div>

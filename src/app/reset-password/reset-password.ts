@@ -2,22 +2,20 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+
 import { AuthService } from '../services/auth';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-reset-password',
   imports: [FormsModule, RouterLink],
-  templateUrl: './register.html',
-  styleUrl: './register.css'
+  templateUrl: './reset-password.html',
+  styleUrl: './reset-password.css'
 })
-export class Register {
+export class ResetPassword {
 
-  firstName = '';
-  lastName = '';
   email = '';
-  phoneNumber = '';
-  dateOfBirth = '';
   password = '';
+  newPassword = '';
   confirmPassword = '';
 
   errorMessage = '';
@@ -32,38 +30,32 @@ export class Register {
     this.errorMessage = '';
 
     if (
-      !this.firstName.trim() ||
-      !this.lastName.trim() ||
       !this.email.trim() ||
-      !this.phoneNumber.trim() ||
-      !this.dateOfBirth ||
       !this.password ||
+      !this.newPassword ||
       !this.confirmPassword
     ) {
       this.errorMessage = 'Please complete all fields.';
       return;
     }
 
-    if (this.password.length < 8) {
+    if (this.newPassword.length < 8) {
       this.errorMessage =
-        'Password must contain at least 8 characters.';
+        'New password must contain at least 8 characters.';
       return;
     }
 
-    if (this.password !== this.confirmPassword) {
+    if (this.newPassword !== this.confirmPassword) {
       this.errorMessage = 'Passwords do not match.';
       return;
     }
 
     this.isLoading = true;
 
-    this.authService.register({
-      firstName: this.firstName,
-      lastName: this.lastName,
+    this.authService.resetPassword({
       email: this.email,
-      phoneNumber: this.phoneNumber,
-      dateOfBirth: this.dateOfBirth,
       password: this.password,
+      newPassword: this.newPassword,
       confirmPassword: this.confirmPassword
     }).subscribe({
 
@@ -90,7 +82,7 @@ export class Register {
         }
 
         this.errorMessage =
-          'Account creation failed.';
+          'Password reset failed.';
       }
     });
   }

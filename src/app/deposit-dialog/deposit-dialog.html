@@ -1,0 +1,84 @@
+<div class="deposit-dialog">
+
+  <button
+    type="button"
+    class="close-button"
+    (click)="cancel()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <div class="dialog-icon">
+    <mat-icon>account_balance_wallet</mat-icon>
+  </div>
+
+  <h2>Deposit Money</h2>
+
+  <p class="subtitle">
+    Add money to your OwlBank account
+  </p>
+
+  <div class="form-group">
+    <label for="amount">
+      Amount
+    </label>
+
+    <div class="amount-input">
+      <span>$</span>
+
+      <input
+        id="amount"
+        type="number"
+        [(ngModel)]="amount"
+        placeholder="0.00"
+        min="0.01"
+        step="0.01"
+      >
+    </div>
+  </div>
+  
+  <div class="from-group description-group">
+    <label for="description">
+        Description
+    </label>
+
+    <input
+        id="description"
+        type="text"
+        name="description"
+        [(ngModel)]="description"
+        placeholder="e.g. Salary"
+        maxLength="1000">
+  </div>
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+      [disabled]="isLoading"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="button"
+      class="deposit-button"
+      (click)="deposit()"
+      [disabled]="isLoading"
+    >
+      <mat-icon>add</mat-icon>
+
+      {{ isLoading ? 'Depositing...' : 'Deposit' }}
+    </button>
+
+  </div>
+
+</div>
