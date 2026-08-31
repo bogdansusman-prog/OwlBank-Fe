@@ -1,0 +1,212 @@
+<div class="account-page">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+
+  <div class="brand">
+    OwlBank
+  </div>
+
+
+  <!-- DOAR PE TELEFON -->
+  <a
+    routerLink="/home"
+    class="mobile-home-button"
+    aria-label="Home"
+  >
+    <mat-icon>home</mat-icon>
+  </a>
+
+
+  <!-- PC / TABLETĂ -->
+  <div class="nav-links">
+
+    <a routerLink="/home">
+      <mat-icon>home</mat-icon>
+      <span class="nav-text">Home</span>
+    </a>
+
+    <a
+      routerLink="/account"
+      class="active"
+    >
+      <mat-icon>person</mat-icon>
+      <span class="nav-text">Account</span>
+    </a>
+
+    <a routerLink="/transfer">
+      <mat-icon>swap_horiz</mat-icon>
+      <span class="nav-text">Transfer</span>
+    </a>
+
+    <a routerLink="/statements">
+      <mat-icon>description</mat-icon>
+      <span class="nav-text">Statements</span>
+    </a>
+
+  </div>
+
+
+  <button
+    type="button"
+    class="profile-button"
+    aria-label="Profile"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+</nav>
+
+
+  <main class="account-content">
+
+    <section class="card-section">
+
+      <div
+        class="bank-card-hover"
+        (pointerdown)="onCardPointerDown($event)"
+        (pointermove)="onCardPointerMove($event)"
+        (pointerup)="onCardPointerUp($event)"
+        (pointerleave)="onCardPointerLeave($event)"
+        (pointercancel)="onCardPointerCancel($event)"
+>
+
+        <div
+          class="bank-card"
+          [class.flipped]="isCardFlipped"
+        >
+
+          <div class="bank-card-inner">
+
+            <!-- FRONT -->
+
+          <div class="bank-card-face bank-card-front">
+
+  
+            <div
+              class="card-lighting"
+              aria-hidden="true"
+            ></div>
+
+            <div class="card-top">
+
+              <span class="card-brand">
+                OwlBank
+              </span>
+
+              <img
+                class="card-logo-image"
+                src="owlbank-logo.png"
+                alt="OwlBank"
+              />
+
+              </div>
+
+            <div class="card-chip">
+            <div></div>
+            <div></div>
+            <div></div>
+            </div>
+
+            <div class="masked-number">
+              .... &nbsp; .... &nbsp; .... &nbsp; 4821
+            </div>
+
+            <div class="card-bottom">
+
+              <div>
+                <span>CARD HOLDER</span>
+                <strong>OWL BANK USER</strong>
+              </div>
+
+              <div>
+                <span>EXPIRES</span>
+                <strong>08/29</strong>
+              </div>
+          </div>
+
+        </div>
+
+
+            <!-- BACK -->
+
+            <div class="bank-card-face bank-card-back">
+              <div
+                class="card-lighting"
+                aria-hidden="true"
+              ></div>
+              <div class="magnetic-strip"></div>
+
+              <div class="card-details">
+
+                <div class="card-detail">
+                  <span>Card Number</span>
+                  <strong>4532 8912 7645 4821</strong>
+                </div>
+
+                <div class="details-row">
+
+                  <div class="card-detail">
+                    <span>Expiry Date</span>
+                    <strong>08/29</strong>
+                  </div>
+
+                  <div class="card-detail">
+                    <span>CVV</span>
+                    <strong>527</strong>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="back-brand">
+                OwlBank
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="reveal-card-button"
+        (click)="toggleCard()"
+        aria-label="Show card details"
+      >
+        <mat-icon>
+          {{ isCardFlipped ? 'visibility_off' : 'visibility' }}
+        </mat-icon>
+      </button>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

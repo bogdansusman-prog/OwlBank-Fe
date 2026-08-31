@@ -24,9 +24,9 @@
 }
 
 
-/* =========================
+/*  
    NAVBAR
-========================= */
+  */
 
 .navbar {
   width: 100%;
@@ -63,9 +63,9 @@
 }
 
 
-/* =========================
+/*  
    NAV LINKS
-========================= */
+  */
 
 .nav-links {
   flex: 1;
@@ -124,9 +124,9 @@
 }
 
 
-/* =========================
+/*  
    PROFILE BUTTON
-========================= */
+  */
 
 .profile-button {
   flex-shrink: 0;
@@ -184,9 +184,9 @@
 }
 
 
-/* =========================
+/*  
    DASHBOARD
-========================= */
+  */
 
 .dashboard {
   width: 100%;
@@ -196,9 +196,9 @@
 }
 
 
-/* =========================
+/*  
    BALANCE
-========================= */
+  */
 
 .balance-section {
   display: grid;
@@ -217,9 +217,9 @@
 }
 
 
-/* =========================
+/*  
    BALANCE LOGOS
-========================= */
+  */
 
 .balance-logo {
   width: 210px;
@@ -261,9 +261,9 @@
 }
 
 
-/* =========================
+/*  
    BALANCE CARD
-========================= */
+  */
 
 .balance-card {
   position: relative;
@@ -349,9 +349,9 @@
 }
 
 
-/* =========================
+/*  
    TRANSACTIONS
-========================= */
+  */
 
 .transactions-card {
   width: 100%;
@@ -431,9 +431,9 @@
 }
 
 
-/* =========================
+/*  
    EMPTY TRANSACTIONS
-========================= */
+  */
 
 .empty-transactions {
   min-height: 180px;
@@ -454,12 +454,229 @@
   font-size: 15px;
 }
 
+/*  
+   TRANSACTIONS LIST
+  */
 
-/* =========================
+.transactions-list {
+  width: 100%;
+
+  /* aproximativ exact 5 tranzacții */
+  max-height: 380px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    rgba(139, 92, 246, 0.5)
+    rgba(255, 255, 255, 0.03);
+}
+
+
+/* SCROLLBAR - CHROME / EDGE */
+
+.transactions-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.transactions-list::-webkit-scrollbar-track {
+  background:
+    rgba(255, 255, 255, 0.02);
+
+  border-radius: 999px;
+}
+
+.transactions-list::-webkit-scrollbar-thumb {
+  background:
+    rgba(139, 92, 246, 0.45);
+
+  border-radius: 999px;
+}
+
+.transactions-list::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(139, 92, 246, 0.7);
+}
+
+
+/*  
+   TRANSACTION ROW
+  */
+
+.transaction-row {
+  min-height: 76px;
+
+  padding: 12px 8px;
+
+  display: grid;
+
+  grid-template-columns:
+    48px
+    minmax(0, 1fr)
+    135px
+    130px;
+
+  align-items: center;
+
+  gap: 14px;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.055);
+
+  transition:
+    background 0.2s ease;
+}
+
+.transaction-row:last-child {
+  border-bottom: none;
+}
+
+.transaction-row:hover {
+  background:
+    rgba(124, 58, 237, 0.045);
+}
+
+
+/*  
+   TRANSACTION ICON
+  */
+
+.transaction-icon {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+}
+
+.transaction-icon mat-icon {
+  width: 21px;
+  height: 21px;
+
+  font-size: 21px;
+}
+
+
+/* DEPOSIT */
+
+.deposit-icon {
+  color: #4ade80;
+
+  background:
+    rgba(34, 197, 94, 0.08);
+
+  border-color:
+    rgba(34, 197, 94, 0.16);
+}
+
+
+/* WITHDRAWAL */
+
+.withdrawal-icon {
+  color: #f87171;
+
+  background:
+    rgba(239, 68, 68, 0.08);
+
+  border-color:
+    rgba(239, 68, 68, 0.16);
+}
+
+
+/* TRANSFER */
+
+.transfer-icon {
+  color: #c4b5fd;
+
+  background:
+    rgba(124, 58, 237, 0.12);
+
+  border-color:
+    rgba(139, 92, 246, 0.2);
+}
+
+
+/*  
+   TRANSACTION INFO
+  */
+
+.transaction-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.transaction-info strong {
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.transaction-info span {
+  overflow: hidden;
+
+  color: #858da0;
+
+  font-size: 13px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/*  
+   TRANSACTION DATE
+  */
+
+.transaction-date {
+  color: #858da0;
+
+  font-size: 13px;
+
+  text-align: right;
+}
+
+
+/*  
+   TRANSACTION AMOUNT
+  */
+
+.transaction-amount {
+  font-size: 15px;
+  font-weight: 650;
+
+  text-align: right;
+  margin-right: 10px;
+}
+
+.money-in {
+  color: #4ade80;
+}
+
+.money-out {
+  color: #f87171;
+}
+
+
+/*  
    QUICK ACTIONS
 
    HIDDEN ON PC + TABLET
-========================= */
+  */
 
 .quick-actions {
   display: none;
@@ -468,9 +685,9 @@
 }
 
 
-/* =========================
+/*  
    ACTION CARD
-========================= */
+  */
 
 .action-card {
   min-height: 125px;
@@ -521,9 +738,9 @@
 }
 
 
-/* =========================
+/*  
    ACTION ICONS
-========================= */
+  */
 
 .action-icon {
   flex-shrink: 0;
@@ -578,9 +795,9 @@
 }
 
 
-/* =========================
+/*  
    TABLET
-========================= */
+  */
 
 @media (max-width: 900px) {
 
@@ -614,9 +831,9 @@
 }
 
 
-/* =========================
+/*  
    MOBILE
-========================= */
+  */
 
 @media (max-width: 650px) {
 
@@ -678,9 +895,9 @@
   }
 
 
-  /* =========================
+  /*  
      BALANCE
-  ========================= */
+    */
 
   .balance-section {
     grid-template-columns: 1fr;
@@ -721,9 +938,9 @@
   }
 
 
-  /* =========================
+  /*  
      TRANSACTIONS
-  ========================= */
+    */
 
   .transactions-card {
     padding: 20px 16px;
@@ -738,11 +955,11 @@
   }
 
 
-  /* =========================
+  /*  
      QUICK ACTIONS
 
      VISIBLE ONLY ON PHONE
-  ========================= */
+    */
 
   .quick-actions {
     display: grid;
@@ -768,9 +985,9 @@
 }
 
 
-/* =========================
+/*  
    SMALL MOBILE
-========================= */
+  */
 
 @media (max-width: 380px) {
 
