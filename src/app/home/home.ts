@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AsyncPipe } from '@angular/common';
@@ -88,7 +88,8 @@ export class Home implements OnInit {
   private platformId = inject(PLATFORM_ID);
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -114,5 +115,18 @@ export class Home implements OnInit {
       }
     });
   }
+  isProfileMenuOpen = false;
+
+toggleProfileMenu(): void {
+  this.isProfileMenuOpen = !this.isProfileMenuOpen;
+}
+
+signOut(): void {
+  localStorage.removeItem('token');
+
+  this.isProfileMenuOpen = false;
+
+  this.router.navigate(['/login']);
+}
 }
 

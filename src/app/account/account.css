@@ -1,21 +1,6 @@
-/* =========================
-   ACCOUNT CONTENT
-========================= */
-
-.account-content {
-  width: 100%;
-  max-width: 1100px;
-
-  margin: 70px auto 0;
-
-  padding: 0 20px;
-}
-
 :host {
   display: block;
   min-height: 100dvh;
-
-  background: #060b18;
 }
 
 * {
@@ -23,39 +8,35 @@
 }
 
 
-/* =========================
+/* =========================================================
    ACCOUNT PAGE
-========================= */
+========================================================= */
 
 .account-page {
-  min-height: 100dvh;
+  height: 100dvh;
 
-  padding: 18px 24px 40px;
+  padding: 18px 24px 24px;
+
+  overflow: hidden;
 
   color: #ffffff;
 
   background:
     radial-gradient(
-      circle at 50% 8%,
+      circle at 50% 10%,
       rgba(124, 58, 237, 0.14),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 80% 35%,
-      rgba(76, 29, 149, 0.05),
-      transparent 30%
+      transparent 35%
     ),
     #060b18;
 }
 
 
-/* =========================
+/* =========================================================
    NAVBAR
-========================= */
+   IDENTIC CU HOME
+========================================================= */
 
 .navbar {
-  position: relative;
-
   width: 100%;
   max-width: 1450px;
   min-height: 72px;
@@ -69,11 +50,10 @@
   gap: 36px;
 
   background:
-    rgba(13, 18, 34, 0.88);
+    rgba(13, 18, 34, 0.85);
 
   border:
-    1px solid
-    rgba(255, 255, 255, 0.07);
+    1px solid rgba(255, 255, 255, 0.08);
 
   border-radius: 18px;
 
@@ -81,22 +61,20 @@
   -webkit-backdrop-filter: blur(16px);
 
   box-shadow:
-    0 10px 35px
-    rgba(0, 0, 0, 0.25),
+    0 10px 35px rgba(0, 0, 0, 0.25),
+    0 0 25px rgba(124, 58, 237, 0.04);
 
-    0 0 25px
-    rgba(124, 58, 237, 0.04);
+  position: relative;
+  z-index: 20;
 }
 
 
-/* =========================
-   OWLBANK
-========================= */
+/* =========================================================
+   BRAND
+========================================================= */
 
 .brand {
   flex-shrink: 0;
-
-  color: #ffffff;
 
   font-size: 22px;
   font-weight: 700;
@@ -105,9 +83,9 @@
 }
 
 
-/* =========================
+/* =========================================================
    NAV LINKS
-========================= */
+========================================================= */
 
 .nav-links {
   flex: 1;
@@ -136,11 +114,13 @@
   transition:
     color 0.2s ease,
     background 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.2s ease;
 }
 
 
-.nav-links a mat-icon {
+.nav-links mat-icon {
+  flex-shrink: 0;
+
   width: 20px;
   height: 20px;
 
@@ -152,7 +132,7 @@
   color: #ddd6fe;
 
   background:
-    rgba(124, 58, 237, 0.10);
+    rgba(124, 58, 237, 0.1);
 }
 
 
@@ -160,7 +140,7 @@
   color: #c4b5fd;
 
   background:
-    rgba(124, 58, 237, 0.22);
+    rgba(124, 58, 237, 0.18);
 
   box-shadow:
     inset 0 0 14px
@@ -168,9 +148,9 @@
 }
 
 
-/* =========================
-   PROFILE BUTTON
-========================= */
+/* =========================================================
+   PROFILE
+========================================================= */
 
 .profile-button {
   flex-shrink: 0;
@@ -183,23 +163,19 @@
   display: grid;
   place-items: center;
 
-  color: #a5adbd;
+  border:
+    1px solid rgba(255, 255, 255, 0.13);
+
+  border-radius: 50%;
 
   background:
     rgba(255, 255, 255, 0.02);
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.10);
-
-  border-radius: 50%;
-
   cursor: pointer;
 
   transition:
-    color 0.2s ease,
-    background 0.2s ease,
     border-color 0.2s ease,
+    background 0.2s ease,
     box-shadow 0.2s ease;
 }
 
@@ -208,18 +184,21 @@
   width: 28px;
   height: 28px;
 
+  color: #a5adbd;
+
   font-size: 28px;
+
+  transition:
+    color 0.2s ease;
 }
 
 
 .profile-button:hover {
-  color: #c4b5fd;
+  border-color:
+    rgba(139, 92, 246, 0.55);
 
   background:
-    rgba(124, 58, 237, 0.10);
-
-  border-color:
-    rgba(139, 92, 246, 0.40);
+    rgba(124, 58, 237, 0.1);
 
   box-shadow:
     0 0 18px
@@ -227,58 +206,470 @@
 }
 
 
-/* =========================
-   MOBILE HOME
-========================= */
+.profile-button:hover mat-icon {
+  color: #c4b5fd;
+}
 
-.mobile-home-button {
-  display: none;
+.profile-menu-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
 
-  text-decoration: none;
+.profile-popover {
+  position: absolute;
+
+  top: calc(100% + 10px);
+  right: 0;
+
+  width: 150px;
+
+  padding: 7px;
+
+  z-index: 100;
+
+  background:
+    rgba(13, 18, 34, 0.98);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.09);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 12px 30px
+    rgba(0, 0, 0, 0.35);
+
+  backdrop-filter: blur(16px);
+
+  animation:
+    profile-popover-in
+    150ms
+    ease-out;
+}
+
+@keyframes profile-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sign-out-button {
+  width: 100%;
+
+  padding: 10px 11px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #fca5a5;
+
+  background: transparent;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.sign-out-button mat-icon {
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+}
+
+.sign-out-button:hover {
+  color: #fecaca;
+
+  background:
+    rgba(239, 68, 68, 0.10);
 }
 
 
-/* =========================
+/* =========================================================
+   MOBILE HOME BUTTON
+========================================================= */
+
+.mobile-home-button {
+  display: none;
+}
+
+
+/* =========================================================
+   ACCOUNT CONTENT
+   ALINIAT CU DASHBOARD-UL DIN HOME
+========================================================= */
+
+.account-content {
+  width: 100%;
+  max-width: 1200px;
+
+  height:
+    calc(
+      100dvh -
+      18px -
+      72px -
+      24px -
+      24px
+    );
+
+  margin: 24px auto 0;
+
+  padding: 0;
+
+  position: relative;
+}
+
+.account-sections {
+  width: 100%;
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scroll-behavior: smooth;
+
+  scroll-snap-type:
+    y mandatory;
+
+  overscroll-behavior: contain;
+
+  scrollbar-width: none;
+}
+
+
+.account-sections::-webkit-scrollbar {
+  display: none;
+}
+
+
+.account-view {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+
+  box-sizing: border-box;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.card-view {
+  position: relative;
+}
+
+
+.details-view {
+  padding: 30px 0;
+
+  justify-content: center;
+}
+
+
+
+
+
+
+
+/* =========================================================
    CARD SECTION
-========================= */
+========================================================= */
 
 .card-section {
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  gap: 22px;
+  gap: 20px;
 }
 
 
-/* =========================
-   CARD WRAPPER
-========================= */
+/* =========================================================
+   CAROUSEL VIEWPORT
+========================================================= */
+
+.carousel-viewport {
+  width: 100%;
+
+  height: 300px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TRACK
+========================================================= */
+
+.cards-track {
+  --card-step: 380px;
+
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  position: absolute;
+
+  top: 0;
+  left: 50%;
+
+  transform:
+    translateX(
+      calc(
+        -210px -
+        (
+          var(--active-index) *
+          var(--card-step)
+        )
+      )
+    );
+
+  transition:
+    transform 540ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+
+  will-change: transform;
+}
+
+
+/* =========================================================
+   CAROUSEL CARD
+========================================================= */
+
+.carousel-card {
+  width: 420px;
+  height: 250px;
+
+  flex: 0 0 420px;
+
+  margin-right: -40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  opacity: 0;
+
+  transform:
+    scale(0.72);
+
+  filter:
+    brightness(0.70)
+    saturate(0.80);
+
+  pointer-events: none;
+
+  transition:
+    transform 540ms
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    opacity 400ms ease,
+    filter 400ms ease;
+
+  will-change:
+    transform,
+    opacity;
+}
+
+
+.carousel-card.is-active {
+  z-index: 5;
+
+  opacity: 1;
+
+  transform:
+    scale(1);
+
+  filter:
+    brightness(1)
+    saturate(1);
+
+  pointer-events: auto;
+
+  cursor: default;
+}
+
+
+.carousel-card.is-left {
+  z-index: 3;
+
+  opacity: 0.62;
+
+  transform:
+    scale(0.72)
+    perspective(1000px)
+    rotateY(7deg);
+
+  filter:
+    brightness(0.72)
+    saturate(0.82);
+
+  pointer-events: auto;
+
+  cursor: pointer;
+}
+
+
+.carousel-card.is-right {
+  z-index: 3;
+
+  opacity: 0.62;
+
+  transform:
+    scale(0.72)
+    perspective(1000px)
+    rotateY(-7deg);
+
+  filter:
+    brightness(0.72)
+    saturate(0.82);
+
+  pointer-events: auto;
+
+  cursor: pointer;
+}
+
+
+.carousel-card.is-far-left,
+.carousel-card.is-far-right {
+  z-index: 0;
+
+  opacity: 0;
+
+  transform:
+    scale(0.62);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   SIDE CARD HOVER
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .carousel-card.is-left:hover {
+    opacity: 0.82;
+
+    transform:
+      scale(0.76)
+      perspective(1000px)
+      rotateY(4deg);
+
+    filter:
+      brightness(0.86)
+      saturate(0.95);
+  }
+
+
+  .carousel-card.is-right:hover {
+    opacity: 0.82;
+
+    transform:
+      scale(0.76)
+      perspective(1000px)
+      rotateY(-4deg);
+
+    filter:
+      brightness(0.86)
+      saturate(0.95);
+  }
+}
+
+
+/* =========================================================
+   SIDE CARDS
+========================================================= */
+
+.carousel-card:not(.is-active)
+.bank-card {
+  transform: none !important;
+
+  filter: none !important;
+}
+
+
+.carousel-card:not(.is-active)
+.card-lighting {
+  opacity: 0 !important;
+}
+
+
+.carousel-card:not(.is-active)
+.bank-card-inner {
+  transform:
+    rotateY(0deg) !important;
+}
+
+
+/* =========================================================
+   PHYSICS WRAPPER
+========================================================= */
 
 .bank-card-hover {
   --tilt-x: 0deg;
   --tilt-y: 0deg;
 
-  --light-angle: 135deg;
-  --lighting-opacity: 0;
+  --light-x: 50%;
+  --light-y: 50%;
 
-  position: relative;
+  --lighting-opacity: 0;
 
   width: 420px;
   height: 250px;
 
   perspective: 900px;
 
+  position: relative;
+
   user-select: none;
   -webkit-user-select: none;
 
   -webkit-tap-highlight-color: transparent;
+
+  touch-action: pan-y;
 }
 
 
-/* =========================
+/* =========================================================
    TURBULENCE
-========================= */
+========================================================= */
 
 .bank-card-hover.is-turbulent {
   animation:
@@ -334,9 +725,9 @@
 }
 
 
-/* =========================
+/* =========================================================
    BANK CARD
-========================= */
+========================================================= */
 
 .bank-card {
   width: 100%;
@@ -354,64 +745,52 @@
 
   transition:
     transform 280ms
-    cubic-bezier(
-      0.2,
-      0.8,
-      0.2,
-      1
-    ),
+      cubic-bezier(
+        0.2,
+        0.8,
+        0.2,
+        1
+      ),
     filter 220ms ease;
 
-  will-change:
-    transform;
+  will-change: transform;
 }
 
-
-/*
-  Cat timp cardul urmareste
-  cursorul / degetul.
-*/
 
 .bank-card-hover.is-tilting
 .bank-card {
   transition:
-    transform 55ms linear,
+    transform 70ms linear,
     filter 220ms ease;
 }
 
 
-/*
-  Glow doar pentru device-uri
-  care chiar au mouse.
-*/
-
-@media (hover: hover) and (pointer: fine) {
-
-  .bank-card-hover:hover
-  .bank-card {
-    filter:
-      drop-shadow(
-        0 18px 28px
-        rgba(0, 0, 0, 0.30)
-      )
-      drop-shadow(
-        0 0 16px
-        rgba(124, 58, 237, 0.12)
-      );
-  }
-
+.carousel-card.is-active
+.bank-card-hover:hover
+.bank-card {
+  filter:
+    drop-shadow(
+      0 18px 28px
+      rgba(0, 0, 0, 0.30)
+    )
+    drop-shadow(
+      0 0 16px
+      rgba(124, 58, 237, 0.12)
+    );
 }
 
 
-/* =========================
-   CARD INNER / FLIP
-========================= */
+/* =========================================================
+   CARD INNER
+========================================================= */
 
 .bank-card-inner {
   position: relative;
 
   width: 100%;
   height: 100%;
+
+  transform-style: preserve-3d;
 
   transition:
     transform 0.75s
@@ -421,9 +800,6 @@
       0.25,
       1
     );
-
-  transform-style:
-    preserve-3d;
 }
 
 
@@ -434,9 +810,9 @@
 }
 
 
-/* =========================
-   CARD FACES
-========================= */
+/* =========================================================
+   CARD FACE
+========================================================= */
 
 .bank-card-face {
   position: absolute;
@@ -467,108 +843,51 @@
 }
 
 
-/* =========================
+/* =========================================================
    FRONT
-========================= */
+========================================================= */
 
 .bank-card-front {
   color: #ffffff;
 
   background:
 
-    /* reflexie metalica fixa */
     linear-gradient(
       110deg,
-
-      rgba(
-        255,
-        255,
-        255,
-        0.08
-      ) 0%,
-
+      rgba(255, 255, 255, 0.08) 0%,
       transparent 18%,
-
-      rgba(
-        255,
-        255,
-        255,
-        0.03
-      ) 38%,
-
+      rgba(255, 255, 255, 0.03) 38%,
       transparent 55%,
-
-      rgba(
-        168,
-        85,
-        247,
-        0.08
-      ) 78%,
-
+      rgba(168, 85, 247, 0.08) 78%,
       transparent 100%
     ),
 
-
-    /* textura brushed metal */
     repeating-linear-gradient(
       0deg,
-
-      rgba(
-        255,
-        255,
-        255,
-        0.012
-      ) 0px,
-
-      rgba(
-        255,
-        255,
-        255,
-        0.012
-      ) 1px,
-
-      rgba(
-        0,
-        0,
-        0,
-        0.012
-      ) 2px,
-
-      rgba(
-        0,
-        0,
-        0,
-        0.012
-      ) 3px
+      rgba(255, 255, 255, 0.012) 0,
+      rgba(255, 255, 255, 0.012) 1px,
+      rgba(0, 0, 0, 0.012) 2px,
+      rgba(0, 0, 0, 0.012) 3px
     ),
 
-
-    /* material principal */
     linear-gradient(
       135deg,
-
       #21183f 0%,
-
       #12152d 35%,
-
       #25184a 70%,
-
       #151127 100%
     );
 }
 
 
-/* =========================
-   DYNAMIC LIGHTING
-========================= */
+/* =========================================================
+   LIGHT
+========================================================= */
 
 .card-lighting {
   position: absolute;
 
   inset: 0;
-
-  width: 100%;
-  height: 100%;
 
   z-index: 5;
 
@@ -577,71 +896,18 @@
   border-radius: inherit;
 
   opacity:
-    var(
-      --lighting-opacity,
-      0
-    );
+    var(--lighting-opacity, 0);
 
-  background:
-    linear-gradient(
-      var(
-        --light-angle,
-        135deg
-      ),
-
-      rgba(
-        255,
-        255,
-        255,
-        0.50
-      ) 0%,
-
-      rgba(
-        216,
-        200,
-        255,
-        0.28
-      ) 28%,
-
-      rgba(
-        255,
-        255,
-        255,
-        0.06
-      ) 48%,
-
-      transparent 55%,
-
-      rgba(
-        0,
-        0,
-        0,
-        0.10
-      ) 75%,
-
-      rgba(
-        0,
-        0,
-        0,
-        0.25
-      ) 100%
-    );
-
-  mix-blend-mode:
-    screen;
+  mix-blend-mode: screen;
 
   transition:
     opacity 100ms ease;
-
-  will-change:
-    opacity,
-    background;
 }
 
 
-/* =========================
-   FRONT DECORATIONS
-========================= */
+/* =========================================================
+   FRONT DECORATION
+========================================================= */
 
 .bank-card-front::before {
   content: "";
@@ -682,28 +948,22 @@
   pointer-events: none;
 
   background:
-    rgba(
-      124,
-      58,
-      237,
-      0.08
-    );
+    rgba(124, 58, 237, 0.08);
 
   border-radius: 50%;
 
-  filter:
-    blur(2px);
+  filter: blur(2px);
 }
 
 
-/* =========================
-   TOP
-========================= */
+/* =========================================================
+   CARD TOP
+========================================================= */
 
 .card-top {
   position: relative;
 
-  z-index: 6;
+  z-index: 2;
 
   display: flex;
   align-items: center;
@@ -719,14 +979,10 @@
 }
 
 
-/* =========================
-   OWL LOGO
-========================= */
-
 .card-logo-image {
   position: relative;
 
-  z-index: 6;
+  z-index: 2;
 
   width: 52px;
   height: 52px;
@@ -734,7 +990,7 @@
   object-fit: contain;
 
   transform:
-    scale(1.50);
+    scale(1.5);
 
   transform-origin:
     center right;
@@ -742,33 +998,23 @@
   filter:
     drop-shadow(
       0 0 8px
-      rgba(
-        139,
-        92,
-        246,
-        0.65
-      )
+      rgba(139, 92, 246, 0.65)
     )
     drop-shadow(
       0 0 18px
-      rgba(
-        124,
-        58,
-        237,
-        0.3
-      )
+      rgba(124, 58, 237, 0.3)
     );
 }
 
 
-/* =========================
+/* =========================================================
    CHIP
-========================= */
+========================================================= */
 
 .card-chip {
   position: relative;
 
-  z-index: 6;
+  z-index: 2;
 
   width: 52px;
   height: 38px;
@@ -791,12 +1037,7 @@
 
   border:
     1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.25
-    );
+    rgba(255, 255, 255, 0.25);
 
   border-radius: 8px;
 }
@@ -805,23 +1046,18 @@
 .card-chip div {
   border:
     1px solid
-    rgba(
-      60,
-      45,
-      15,
-      0.25
-    );
+    rgba(60, 45, 15, 0.25);
 }
 
 
-/* =========================
+/* =========================================================
    NUMBER
-========================= */
+========================================================= */
 
 .masked-number {
   position: relative;
 
-  z-index: 6;
+  z-index: 2;
 
   margin-top: 20px;
 
@@ -832,14 +1068,14 @@
 }
 
 
-/* =========================
-   BOTTOM
-========================= */
+/* =========================================================
+   CARD BOTTOM
+========================================================= */
 
 .card-bottom {
   position: absolute;
 
-  z-index: 6;
+  z-index: 2;
 
   right: 28px;
   bottom: 23px;
@@ -877,9 +1113,9 @@
 }
 
 
-/* =========================
-   BACK
-========================= */
+/* =========================================================
+   CARD BACK
+========================================================= */
 
 .bank-card-back {
   padding: 0;
@@ -898,15 +1134,7 @@
 }
 
 
-/* =========================
-   MAGNETIC STRIPE
-========================= */
-
 .magnetic-strip {
-  position: relative;
-
-  z-index: 6;
-
   width: 100%;
   height: 55px;
 
@@ -922,15 +1150,7 @@
 }
 
 
-/* =========================
-   BACK DETAILS
-========================= */
-
 .card-details {
-  position: relative;
-
-  z-index: 6;
-
   padding:
     24px 30px 0;
 }
@@ -977,8 +1197,6 @@
 .back-brand {
   position: absolute;
 
-  z-index: 6;
-
   right: 28px;
   bottom: 22px;
 
@@ -989,9 +1207,20 @@
 }
 
 
-/* =========================
-   EYE BUTTON
-========================= */
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.card-controls {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 14px;
+}
+
 
 .reveal-card-button {
   width: 52px;
@@ -1005,21 +1234,11 @@
   color: #c4b5fd;
 
   background:
-    rgba(
-      124,
-      58,
-      237,
-      0.14
-    );
+    rgba(124, 58, 237, 0.14);
 
   border:
     1px solid
-    rgba(
-      139,
-      92,
-      246,
-      0.28
-    );
+    rgba(139, 92, 246, 0.28);
 
   border-radius: 50%;
 
@@ -1027,21 +1246,13 @@
 
   box-shadow:
     0 0 20px
-    rgba(
-      124,
-      58,
-      237,
-      0.12
-    );
+    rgba(124, 58, 237, 0.12);
 
   transition:
     transform 0.2s ease,
     background 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
-
-  -webkit-tap-highlight-color:
-    transparent;
 }
 
 
@@ -1053,38 +1264,19 @@
 }
 
 
-@media (hover: hover) and (pointer: fine) {
+.reveal-card-button:hover {
+  transform:
+    scale(1.08);
 
-  .reveal-card-button:hover {
-    transform:
-      scale(1.08);
+  background:
+    rgba(124, 58, 237, 0.23);
 
-    background:
-      rgba(
-        124,
-        58,
-        237,
-        0.23
-      );
+  border-color:
+    rgba(168, 85, 247, 0.55);
 
-    border-color:
-      rgba(
-        168,
-        85,
-        247,
-        0.55
-      );
-
-    box-shadow:
-      0 0 26px
-      rgba(
-        124,
-        58,
-        237,
-        0.28
-      );
-  }
-
+  box-shadow:
+    0 0 26px
+    rgba(124, 58, 237, 0.28);
 }
 
 
@@ -1094,69 +1286,1289 @@
 }
 
 
-/* =========================
-   TOUCH DEVICES
-========================= */
+/* =========================================================
+   CAROUSEL NAV
+========================================================= */
 
-@media (hover: none) and (pointer: coarse) {
+.carousel-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .bank-card-hover {
-    /*
-      Astfel browserul nu transforma
-      hold + drag in scroll.
-    */
-    touch-action: none;
-  }
+  gap: 18px;
+}
 
 
-  .bank-card-hover.is-tilting
-  .bank-card {
-    transition:
-      transform 55ms linear,
-      filter 180ms ease;
+.carousel-dots {
+  min-width: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+
+  display: block;
+  flex-shrink: 0;
+
+  background:
+    rgba(174, 181, 200, 0.32);
+
+  border-radius: 50%;
+
+  transition:
+    transform 300ms ease,
+    background 300ms ease,
+    box-shadow 300ms ease;
+}
+
+
+.carousel-dot.active {
+  background: #8b5cf6;
+
+  transform:
+    scale(1.4);
+
+  box-shadow:
+    0 0 11px
+    rgba(139, 92, 246, 0.65);
+}
+
+
+.mobile-arrow-button {
+  display: none;
+}
+
+/* =========================================================
+   ACCOUNT SIDE NAV
+========================================================= */
+
+.account-side-nav {
+  position: fixed;
+
+  top: 50%;
+  right: 18px;
+
+  z-index: 60;
+
+  width: 57px;
+
+  padding: 6px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  overflow: hidden;
+
+  background:
+    rgba(13, 18, 34, 0.94);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 15px 40px
+    rgba(0, 0, 0, 0.32);
+
+  backdrop-filter: blur(16px);
+
+  transform:
+    translateY(-50%);
+
+  transition:
+    width 260ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+/* Desktop hover */
+@media (hover: hover) and (pointer: fine) {
+
+  .account-side-nav:hover {
+    width: 205px;
   }
 
 }
 
 
-/* =========================
-   TABLET
-========================= */
+/* =========================================================
+   ITEMS
+========================================================= */
 
-@media (max-width: 900px) {
+.side-nav-item {
+  width: 100%;
+  height: 44px;
 
-  .bank-card-hover {
-    width:
-      min(
-        72vw,
-        420px
-      );
+  padding: 0 10px;
 
-    height: auto;
+  display: flex;
+  align-items: center;
 
-    aspect-ratio:
-      1.68 / 1;
-  }
+  gap: 12px;
+
+  flex-shrink: 0;
+
+  color: #727b90;
+
+  background: transparent;
+
+  border:
+    1px solid transparent;
+
+  border-radius: 11px;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  font: inherit;
+
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
 
 
-  .bank-card {
-    width: 100%;
-    height: 100%;
+.side-nav-item mat-icon {
+  width: 22px;
+  height: 22px;
+
+  flex:
+    0 0 22px;
+
+  font-size: 22px;
+}
+
+
+.side-nav-item span {
+  white-space: nowrap;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  opacity: 0;
+
+  transform:
+    translateX(8px);
+
+  transition:
+    opacity 180ms ease,
+    transform 220ms
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+
+  .account-side-nav:hover
+  .side-nav-item span {
+    opacity: 1;
+
+    transform:
+      translateX(0);
   }
 
 }
 
 
-/* =========================
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.side-nav-item.active {
+  color: #d8ccff;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.28),
+      rgba(76, 29, 149, 0.20)
+    );
+
+  border-color:
+    rgba(167, 139, 250, 0.34);
+
+  box-shadow:
+    inset 0 0 16px
+    rgba(124, 58, 237, 0.08),
+
+    0 0 18px
+    rgba(124, 58, 237, 0.14);
+}
+
+
+.side-nav-item.active mat-icon {
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(196, 181, 253, 0.55)
+    );
+}
+
+
+.side-nav-item:hover {
+  color: #e9e7f2;
+
+  background:
+    rgba(124, 58, 237, 0.09);
+}
+
+
+.side-nav-item:active {
+  transform:
+    scale(0.96);
+}
+
+/* =========================================================
+   TABLET SIDE NAV
+========================================================= */
+
+@media (min-width: 651px) and (max-width: 1230px) {
+
+  .account-side-nav {
+    top: auto;
+    right: 22px;
+    bottom: 22px;
+
+    width: auto;
+
+    padding: 7px;
+
+    flex-direction: row;
+
+    gap: 7px;
+
+    transform: none;
+
+    border-radius: 18px;
+  }
+
+
+  .account-side-nav:hover {
+    width: auto;
+  }
+
+
+  .side-nav-item {
+    width: 52px;
+    height: 52px;
+
+    min-width: 52px;
+    min-height: 52px;
+
+    padding: 0;
+
+    justify-content: center;
+
+    border-radius: 13px;
+  }
+
+
+  .side-nav-item span {
+    display: none;
+  }
+
+
+  .side-nav-item mat-icon {
+    width: 26px;
+    height: 26px;
+
+    flex: 0 0 26px;
+
+    font-size: 26px;
+  }
+
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media (max-width: 650px) {
 
-  /* PAGE */
+  .account-side-nav {
+    top: auto;
+
+    right: 50%;
+    bottom: 16px;
+
+    width: auto;
+
+    padding: 6px;
+
+    flex-direction: row;
+
+    transform:
+      translateX(50%);
+
+    border-radius: 15px;
+  }
+
+
+  .side-nav-item {
+    width: 46px;
+    height: 42px;
+
+    padding: 0;
+
+    justify-content: center;
+  }
+
+
+  .side-nav-item span {
+    display: none;
+  }
+
+
+  .side-nav-item mat-icon {
+    width: 22px;
+    height: 22px;
+
+    font-size: 22px;
+  }
+
+}
+
+/* =========================================================
+   ACCOUNT INFORMATION
+========================================================= */
+
+.account-information {
+  width: 100%;
+  max-width: 1120px;
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 24px;
+}
+
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.account-loading,
+.account-error {
+  min-height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #aeb5c8;
+
+  background:
+    rgba(13, 18, 34, 0.9);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 40px
+    rgba(0, 0, 0, 0.22);
+}
+
+
+.account-loading mat-icon {
+  color: #a78bfa;
+
+  animation:
+    account-spin
+    1.2s
+    linear
+    infinite;
+}
+
+
+.account-error {
+  color: #fca5a5;
+
+  border-color:
+    rgba(239, 68, 68, 0.20);
+}
+
+
+.account-error mat-icon {
+  color: #f87171;
+}
+
+
+@keyframes account-spin {
+
+  from {
+    transform:
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.details-panel {
+  padding: 28px;
+
+  background:
+    rgba(13, 18, 34, 0.9);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 40px
+    rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 26px;
+}
+
+
+.section-heading-icon {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #c4b5fd;
+
+  background:
+    rgba(124, 58, 237, 0.14);
+
+  border:
+    1px solid
+    rgba(139, 92, 246, 0.24);
+
+  border-radius: 13px;
+}
+
+
+.section-heading-icon mat-icon {
+  width: 22px;
+  height: 22px;
+
+  font-size: 22px;
+}
+
+
+.section-heading h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+.section-heading p {
+  margin: 5px 0 0;
+
+  color: #858da0;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   ACCOUNT DETAILS
+========================================================= */
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+
+.detail-item {
+  min-height: 72px;
+
+  padding: 16px 18px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 7px;
+
+  background:
+    rgba(255, 255, 255, 0.018);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.055);
+
+  border-radius: 14px;
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+
+.detail-item:hover {
+  background:
+    rgba(124, 58, 237, 0.055);
+
+  border-color:
+    rgba(139, 92, 246, 0.16);
+
+  transform:
+    translateY(-1px);
+}
+
+
+.detail-item-wide {
+  grid-column:
+    1 / -1;
+}
+
+
+.detail-label {
+  color: #737b91;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1.1px;
+}
+
+
+.detail-value {
+  color: #e9e7f2;
+
+  font-size: 15px;
+  font-weight: 550;
+
+  overflow-wrap: anywhere;
+}
+
+.password-detail-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.password-mask {
+  letter-spacing: 2px;
+}
+
+.edit-password-button {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  color: #a78bfa;
+
+  background:
+    rgba(124, 58, 237, 0.10);
+
+  border:
+    1px solid
+    rgba(139, 92, 246, 0.18);
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.edit-password-button mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.edit-password-button:hover {
+  background:
+    rgba(124, 58, 237, 0.20);
+
+  border-color:
+    rgba(139, 92, 246, 0.38);
+
+  transform:
+    translateY(-1px);
+}
+
+.edit-password-button:active {
+  transform: scale(0.94);
+}
+
+/* =========================================================
+   EDITABLE ACCOUNT DETAILS
+========================================================= */
+
+.editable-detail-content {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   EDIT BUTTON
+========================================================= */
+
+.edit-detail-button {
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+  min-height: 32px;
+
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  color: #a78bfa;
+
+  background:
+    rgba(124, 58, 237, 0.10);
+
+  border:
+    1px solid
+    rgba(139, 92, 246, 0.28);
+
+  border-radius: 9px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+
+.edit-detail-button mat-icon {
+  width: 17px;
+  height: 17px;
+
+  font-size: 17px;
+  line-height: 17px;
+}
+
+
+.edit-detail-button:hover {
+  color: #ddd6fe;
+
+  background:
+    rgba(124, 58, 237, 0.20);
+
+  border-color:
+    rgba(167, 139, 250, 0.48);
+
+  box-shadow:
+    0 0 14px
+    rgba(124, 58, 237, 0.18);
+
+  transform:
+    translateY(-1px);
+}
+
+
+.edit-detail-button:active {
+  transform:
+    scale(0.94);
+}
+
+
+/* =========================================================
+   INLINE EDIT ROW
+========================================================= */
+
+.inline-edit-row {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.inline-edit-input {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+
+  flex: 1;
+
+  box-sizing: border-box;
+
+  padding:
+    0 12px;
+
+  color: #f4f2ff;
+
+  background:
+    rgba(7, 11, 24, 0.72);
+
+  border:
+    1px solid
+    rgba(139, 92, 246, 0.38);
+
+  border-radius: 9px;
+
+  outline: none;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+
+.inline-edit-input:hover {
+  border-color:
+    rgba(167, 139, 250, 0.52);
+}
+
+
+.inline-edit-input:focus {
+  background:
+    rgba(13, 18, 34, 0.92);
+
+  border-color:
+    rgba(167, 139, 250, 0.82);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(124, 58, 237, 0.10),
+
+    0 0 15px
+    rgba(124, 58, 237, 0.08);
+}
+
+
+/* =========================================================
+   CHECK / CANCEL
+========================================================= */
+
+.inline-edit-action {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+  min-height: 38px;
+
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+
+.inline-edit-action mat-icon {
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+  line-height: 19px;
+}
+
+
+/* SAVE */
+
+.inline-edit-action.save {
+  color: #86efac;
+
+  background:
+    rgba(34, 197, 94, 0.10);
+
+  border:
+    1px solid
+    rgba(34, 197, 94, 0.25);
+}
+
+
+.inline-edit-action.save:hover {
+  color: #bbf7d0;
+
+  background:
+    rgba(34, 197, 94, 0.18);
+
+  border-color:
+    rgba(74, 222, 128, 0.46);
+
+  box-shadow:
+    0 0 14px
+    rgba(34, 197, 94, 0.12);
+}
+
+
+/* CANCEL */
+
+.inline-edit-action.cancel {
+  color: #fca5a5;
+
+  background:
+    rgba(239, 68, 68, 0.09);
+
+  border:
+    1px solid
+    rgba(239, 68, 68, 0.22);
+}
+
+
+.inline-edit-action.cancel:hover {
+  color: #fecaca;
+
+  background:
+    rgba(239, 68, 68, 0.17);
+
+  border-color:
+    rgba(248, 113, 113, 0.42);
+
+  box-shadow:
+    0 0 14px
+    rgba(239, 68, 68, 0.10);
+}
+
+
+.inline-edit-action:active {
+  transform:
+    scale(0.93);
+}
+
+
+.inline-edit-action:disabled,
+.inline-edit-input:disabled {
+  opacity: 0.5;
+
+  cursor: default;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.inline-edit-error {
+  margin-top: 2px;
+
+  color: #fca5a5;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .edit-detail-button {
+    width: 34px;
+    height: 34px;
+
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+
+  .inline-edit-row {
+    gap: 6px;
+  }
+
+
+  .inline-edit-input {
+    height: 40px;
+
+    padding:
+      0 10px;
+
+    font-size: 13px;
+  }
+
+
+  .inline-edit-action {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+}
+/* =========================================================
+   USER CARDS
+========================================================= */
+
+.user-cards-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+.user-card-item {
+  min-height: 78px;
+
+  padding: 14px 18px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.018);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.055);
+
+  border-radius: 15px;
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+
+.user-card-item:hover {
+  background:
+    rgba(124, 58, 237, 0.055);
+
+  border-color:
+    rgba(139, 92, 246, 0.16);
+
+  transform:
+    translateY(-1px);
+}
+
+
+.user-card-icon {
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #a78bfa;
+
+  background:
+    rgba(124, 58, 237, 0.12);
+
+  border:
+    1px solid
+    rgba(139, 92, 246, 0.20);
+
+  border-radius: 12px;
+}
+
+
+.user-card-icon mat-icon {
+  width: 21px;
+  height: 21px;
+
+  font-size: 21px;
+}
+
+
+.user-card-main {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.user-card-holder {
+  color: #f4f1ff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.4px;
+}
+
+
+.user-card-number {
+  color: #7f879b;
+
+  font-size: 13px;
+
+  letter-spacing: 1.2px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.card-status {
+  min-width: 74px;
+
+  margin-left: auto;
+
+  padding: 7px 11px;
+
+  text-align: center;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+  border-radius: 999px;
+}
+
+
+.card-status.active {
+  color: #86efac;
+
+  background:
+    rgba(34, 197, 94, 0.10);
+
+  border:
+    1px solid
+    rgba(34, 197, 94, 0.20);
+}
+
+
+.card-status.blocked {
+  color: #fca5a5;
+
+  background:
+    rgba(239, 68, 68, 0.10);
+
+  border:
+    1px solid
+    rgba(239, 68, 68, 0.20);
+}
+
+
+/* =========================================================
+   NO CARDS
+========================================================= */
+
+.no-cards {
+  min-height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #7f879b;
+
+  border:
+    1px dashed
+    rgba(255, 255, 255, 0.07);
+
+  border-radius: 14px;
+}
+
+
+.no-cards mat-icon {
+  color: #8b5cf6;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .navbar {
+    gap: 18px;
+  }
+
+
+  .nav-links a {
+    padding: 10px 11px;
+
+    font-size: 14px;
+  }
+
+
+  .carousel-viewport {
+    width:
+      calc(100vw - 48px);
+  }
+
+
+  .cards-track {
+    --card-step: 335px;
+  }
+
+
+  .carousel-card {
+    margin-right: -85px;
+  }
+
+
+  .carousel-card.is-left {
+    transform:
+      scale(0.64)
+      perspective(1000px)
+      rotateY(7deg);
+  }
+
+
+  .carousel-card.is-right {
+    transform:
+      scale(0.64)
+      perspective(1000px)
+      rotateY(-7deg);
+  }
+
+
+  .account-information {
+    max-width: 760px;
+
+    margin: 0 auto;
+  }
+
+
+  .details-panel,
+  .user-cards-panel {
+    padding: 24px;
+  }
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+@media (max-width: 650px) {
 
   .account-page {
-    padding: 12px 12px 30px;
+    height: 100dvh;
+
+    padding:
+      12px
+      12px
+      30px;
+
+    overflow: hidden;
   }
 
 
@@ -1167,39 +2579,40 @@
 
     min-height: 64px;
 
-    padding: 0 15px;
+    padding:
+      0 15px;
 
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 
     gap: 8px;
   }
 
 
-  /*
-    Ascundem toate taburile:
-    Home
-    Account
-    Transfer
-    Statements
-  */
-
   .nav-links {
     display: none;
   }
 
 
-  /* OWLBANK LEFT */
-
   .brand {
     position: relative;
 
-    z-index: 20;
+    z-index: 2;
 
     font-size: 19px;
   }
 
 
-  /* HOME ICON CENTER */
+  .profile-button {
+    position: relative;
+
+    z-index: 2;
+
+    width: 40px;
+    height: 40px;
+  }
+
 
   .mobile-home-button {
     position: absolute;
@@ -1207,44 +2620,37 @@
     top: 50%;
     left: 50%;
 
-    z-index: 20;
-
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
 
     display: grid;
     place-items: center;
 
-    color: #c4b5fd;
+    margin: 0;
+
+    color: #a78bfa;
 
     text-decoration: none;
 
     background:
-      rgba(124, 58, 237, 0.22);
+      rgba(124, 58, 237, 0.16);
 
     border:
       1px solid
       rgba(139, 92, 246, 0.25);
 
-    border-radius: 12px;
+    border-radius: 11px;
 
     transform:
       translate(-50%, -50%);
-
-    box-shadow:
-      0 0 18px
-      rgba(124, 58, 237, 0.12);
-
-    -webkit-tap-highlight-color:
-      transparent;
   }
 
 
   .mobile-home-button mat-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 
-    font-size: 24px;
+    font-size: 20px;
   }
 
 
@@ -1255,48 +2661,247 @@
   }
 
 
-  /* PROFILE RIGHT */
-
-  .profile-button {
-    position: relative;
-
-    z-index: 20;
-
-    width: 40px;
-    height: 40px;
-  }
-
-
   /* CONTENT */
 
   .account-content {
-    margin-top: 45px;
+    height:
+      calc(
+        100dvh -
+        12px -
+        64px -
+        18px -
+        30px
+      );
 
-    padding: 0 8px;
+    margin-top: 18px;
   }
 
 
-  /* CARD */
+  .account-view {
+    padding-bottom: 72px;
+  }
 
+
+  .details-view {
+    padding-top: 18px;
+  }
+
+
+  .card-section {
+    gap: 18px;
+  }
+
+
+  /* CAROUSEL */
+
+  .carousel-viewport {
+    width: 100%;
+
+    height:
+      min(
+        calc(88vw / 1.68),
+        226px
+      );
+  }
+
+
+  .cards-track {
+    --mobile-card-width:
+      min(
+        88vw,
+        380px
+      );
+
+    --card-step:
+      calc(
+        var(--mobile-card-width)
+        + 20px
+      );
+
+    height: 100%;
+
+    left: 50%;
+
+    align-items: center;
+
+    transform:
+      translateX(
+        calc(
+          (
+            var(--mobile-card-width)
+            / -2
+          )
+          -
+          (
+            var(--active-index)
+            *
+            var(--card-step)
+          )
+        )
+      );
+  }
+
+
+  .carousel-card {
+    width:
+      var(--mobile-card-width);
+
+    height: auto;
+
+    aspect-ratio:
+      1.68 / 1;
+
+    flex:
+      0 0
+      var(--mobile-card-width);
+
+    margin-right: 20px;
+  }
+
+
+  .carousel-card.is-left,
+  .carousel-card.is-right,
+  .carousel-card.is-far-left,
+  .carousel-card.is-far-right {
+    opacity: 0;
+
+    pointer-events: none;
+  }
+
+
+  .carousel-card.is-active {
+    opacity: 1;
+
+    transform:
+      scale(1);
+  }
+
+
+  .carousel-card
   .bank-card-hover {
+    width: 100%;
+    height: 100%;
+  }
+
+
+  /* CONTROLS */
+
+  .card-controls {
     width:
       min(
         88vw,
         380px
       );
 
-    height: auto;
-
-    aspect-ratio:
-      1.68 / 1;
+    gap: 16px;
   }
 
 
-  .bank-card {
+  .carousel-navigation {
     width: 100%;
-    height: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+      56px
+      1fr
+      56px;
+
+    align-items: center;
+
+    gap: 16px;
   }
 
+
+  .mobile-arrow-button {
+    width: 56px;
+    height: 56px;
+
+    display: grid;
+    place-items: center;
+
+    padding: 0;
+
+    color: #c4b5fd;
+
+    background:
+      rgba(124, 58, 237, 0.14);
+
+    border:
+      1px solid
+      rgba(139, 92, 246, 0.30);
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    box-shadow:
+      0 0 18px
+      rgba(124, 58, 237, 0.10);
+
+    transition:
+      transform 180ms ease,
+      color 180ms ease,
+      opacity 180ms ease,
+      background 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+
+  .mobile-arrow-button:first-child {
+    justify-self: start;
+  }
+
+
+  .mobile-arrow-button:last-child {
+    justify-self: end;
+  }
+
+
+  .mobile-arrow-button mat-icon {
+    width: 26px;
+    height: 26px;
+
+    font-size: 26px;
+  }
+
+
+  .mobile-arrow-button:active:not(:disabled) {
+    transform:
+      scale(0.92);
+
+    background:
+      rgba(124, 58, 237, 0.25);
+  }
+
+
+  .mobile-arrow-button:disabled {
+    color:
+      rgba(174, 181, 200, 0.22);
+
+    background:
+      rgba(255, 255, 255, 0.018);
+
+    border-color:
+      rgba(255, 255, 255, 0.055);
+
+    box-shadow: none;
+
+    opacity: 0.45;
+
+    cursor: default;
+  }
+
+
+  .carousel-dots {
+    min-width: 0;
+
+    justify-self: center;
+  }
+
+
+  /* MOBILE CARD */
 
   .bank-card-face {
     padding: 22px;
@@ -1357,5 +2962,142 @@
     margin-top: 18px;
 
     gap: 45px;
+  }
+
+
+  /* ACCOUNT DETAILS */
+
+  .account-information {
+    width: 100%;
+
+    margin: 0 auto;
+
+    gap: 18px;
+  }
+
+
+  .details-panel,
+  .user-cards-panel {
+    padding: 18px;
+
+    border-radius: 18px;
+  }
+
+
+  .section-heading {
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+  }
+
+
+  .section-heading-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+
+  .section-heading h2 {
+    font-size: 18px;
+  }
+
+
+  .section-heading p {
+    line-height: 1.45;
+  }
+
+
+  .details-grid {
+    grid-template-columns:
+      1fr;
+
+    gap: 10px;
+  }
+
+
+  .detail-item-wide {
+    grid-column: auto;
+  }
+
+
+  .detail-item {
+    min-height: 64px;
+
+    padding:
+      14px 15px;
+  }
+
+
+  .user-card-item {
+    min-height: 72px;
+
+    padding:
+      13px 14px;
+
+    gap: 12px;
+  }
+
+
+  .user-card-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .user-card-holder {
+    font-size: 13px;
+  }
+
+
+  .user-card-number {
+    font-size: 11px;
+
+    letter-spacing: 0.8px;
+  }
+
+
+  .card-status {
+    min-width: 62px;
+
+    padding:
+      6px 8px;
+
+    font-size: 9px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .account-page {
+    padding-inline: 8px;
+  }
+
+
+  .navbar {
+    padding-inline: 9px;
+  }
+
+
+  .brand {
+    font-size: 17px;
+  }
+
+
+  .profile-button {
+    width: 36px;
+    height: 36px;
+  }
+
+
+  .profile-button mat-icon {
+    width: 25px;
+    height: 25px;
+
+    font-size: 25px;
   }
 }

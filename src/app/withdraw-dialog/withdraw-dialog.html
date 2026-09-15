@@ -63,7 +63,7 @@
       type="button"
       class="cancel-button"
       (click)="cancel()"
-      [disabled]="isLoading"
+      [disabled]="isLoading | async" 
     >
       Cancel
     </button>
@@ -72,11 +72,11 @@
       type="button"
       class="withdraw-button"
       (click)="withdraw()"
-      [disabled]="isLoading"
+      [disabled]="isLoading | async" 
     >
       <mat-icon>remove</mat-icon>
 
-      {{ isLoading ? 'Withdrawing...' : 'Withdraw' }}
+      {{ (isLoading | async) ? 'Withdrawing...' : 'Withdraw' }}
     </button>
 
   </div>

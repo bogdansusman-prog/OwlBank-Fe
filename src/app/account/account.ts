@@ -1,136 +1,637 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import {
+  MatDialog,
+  MatDialogModule
+} from '@angular/material/dialog';
 
+import {
+  ChangePasswordDialog
+} from './change-password-dialog/change-password-dialog';
+
+import {
+  UserDetails,
+  UserService
+} from '../services/user';
+
+type EditableUserField =
+  | 'email'
+  | 'firstName'
+  | 'lastName'
+  | 'phoneNumber';
 
 @Component({
   selector: 'app-account',
   imports: [
     RouterLink,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    FormsModule
   ],
   templateUrl: './account.html',
   styleUrl: './account.css'
 })
+export class Account implements OnInit {
+
+  /*    
+     ACCOUNT SECTIONS
+      */
+
+  @ViewChild('cardView')
+  cardView!: ElementRef<HTMLElement>;
+
+  @ViewChild('detailsView')
+  detailsView!: ElementRef<HTMLElement>;
+
+  activeAccountSection:
+    'card' | 'details' = 'card';
+
+  private isSectionAnimating = false;
 
 
-export class Account {
+  /*    
+     USER DETAILS
+      */
 
-  private holdTimer: ReturnType<typeof setTimeout> | null = null;
+  userDetails:
+    UserDetails | null = null;
+
+  isUserDetailsLoading = true;
+  userDetailsError = '';
+
+  editingField:
+    EditableUserField | null = null;
+
+  editValue = '';
+  isSavingField = false;
+  editFieldError = '';
+
+
+  /*    
+     CARD STATE
+      */
+
+  isCardFlipped = false;
+  isCarouselAnimating = false;
+  activeCardIndex = 0;
+
+  private holdTimer:
+    ReturnType<typeof setTimeout> | null = null;
 
   private touchHoldActive = false;
 
-  private activePointerId: number | null = null;
+  private activePointerId:
+    number | null = null;
 
-  isCardFlipped = false;
+
+  /*    
+     PROFILE
+      */
+
+  isProfileMenuOpen = false;
 
 
-  toggleCard(): void {
+  /*    
+     TEMPORARY MOCK CARDS
+      */
 
-    this.isCardFlipped =
-      !this.isCardFlipped;
+  cards = [
+    {
+      number: '4532 8912 7645 4821',
+      holder: 'OWL BANK USER',
+      expiry: '08/29',
+      cvv: '527'
+    },
+    {
+      number: '5198 2241 6732 1147',
+      holder: 'OWL BANK USER',
+      expiry: '11/29',
+      cvv: '314'
+    },
+    {
+      number: '4716 9034 2251 8890',
+      holder: 'OWL BANK USER',
+      expiry: '03/30',
+      cvv: '682'
+    },
+    {
+      number: '5521 3309 8821 5412',
+      holder: 'OWL BANK USER',
+      expiry: '07/30',
+      cvv: '193'
+    },
+    {
+      number: '4917 6432 1109 3748',
+      holder: 'OWL BANK USER',
+      expiry: '12/30',
+      cvv: '845'
+    }
+  ];
 
+
+  /*    
+     CONSTRUCTOR / INIT
+      */
+
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUserDetails();
   }
 
 
-  onCardPointerDown(
-    event: PointerEvent
+  /*    
+     USER DETAILS
+      */
+
+  loadUserDetails(): void {
+    this.isUserDetailsLoading = true;
+    this.userDetailsError = '';
+
+    this.userService
+      .getUserDetails()
+      .subscribe({
+        next: (
+          details: UserDetails
+        ) => {
+          this.userDetails = details;
+          this.isUserDetailsLoading = false;
+        },
+
+        error: (error) => {
+          console.error(
+            'User details request failed:',
+            error
+          );
+
+          this.userDetailsError =
+            'Could not load account details.';
+
+          this.isUserDetailsLoading = false;
+        }
+      });
+  }
+
+  startEditing(
+    field: EditableUserField
   ): void {
-
-    const wrapper =
-      event.currentTarget as HTMLElement;
-
-
-    /*
-      MOUSE
-
-      Pe PC:
-      click = turbulence.
-    */
-
-    if (event.pointerType === 'mouse') {
-
-      this.triggerTurbulence(wrapper);
-
+    if (
+      !this.userDetails ||
+      this.isSavingField
+    ) {
       return;
     }
 
+    this.editingField = field;
+    this.editValue =
+      this.userDetails[field] ?? '';
 
-    /*
-      TOUCH / PEN
+    this.editFieldError = '';
+  }
 
-      Nu pornim tilt-ul imediat.
+  cancelEditing(): void {
+    if (this.isSavingField) {
+      return;
+    }
 
-      Asteptam sa vedem daca
-      utilizatorul tine degetul.
-    */
+    this.resetEditingState();
+  }
 
-    this.activePointerId =
-      event.pointerId;
+  saveEditing(
+    field: EditableUserField
+  ): void {
+    if (
+      !this.userDetails ||
+      this.editingField !== field ||
+      this.isSavingField
+    ) {
+      return;
+    }
 
-    this.touchHoldActive =
-      false;
+    const value =
+      this.editValue.trim();
 
+    if (!value) {
+      this.editFieldError =
+        'This field cannot be empty.';
+      return;
+    }
 
-    wrapper.setPointerCapture(
-      event.pointerId
-    );
+    if (
+      field === 'email' &&
+      !this.isValidEmail(value)
+    ) {
+      this.editFieldError =
+        'Please enter a valid email address.';
+      return;
+    }
 
+    if (
+      field === 'phoneNumber' &&
+      !this.isValidPhoneNumber(value)
+    ) {
+      this.editFieldError =
+        'Please enter a valid phone number.';
+      return;
+    }
 
-    this.holdTimer =
-      setTimeout(() => {
+    if (
+      value ===
+      this.userDetails[field]
+    ) {
+      this.resetEditingState();
+      return;
+    }
 
-        this.touchHoldActive =
-          true;
+    this.isSavingField = true;
+    this.editFieldError = '';
 
-        this.applyCardTilt(
-          event,
-          wrapper
-        );
+    this.userService
+      .updateUserDetails({
+        [field]: value
+      })
+      .subscribe({
+        next: () => {
+          if (!this.userDetails) {
+            this.isSavingField = false;
+            return;
+          }
 
-      }, 250);
+          this.userDetails = {
+            ...this.userDetails,
+            [field]: value
+          };
+
+          this.resetEditingState();
+        },
+
+        error: (error) => {
+          console.error(
+            'User details update failed:',
+            error
+          );
+
+          this.isSavingField = false;
+
+          if (
+            typeof error.error ===
+              'string' &&
+            error.error.trim()
+          ) {
+            this.editFieldError =
+              error.error;
+            return;
+          }
+
+          this.editFieldError =
+            'Could not update this field.';
+        }
+      });
+  }
+
+  private resetEditingState(): void {
+    this.editingField = null;
+    this.editValue = '';
+    this.isSavingField = false;
+    this.editFieldError = '';
+  }
+
+  private isValidEmail(
+    email: string
+  ): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(email);
+  }
+
+  private isValidPhoneNumber(
+    phoneNumber: string
+  ): boolean {
+    return /^\+?[0-9]{9,15}$/
+      .test(phoneNumber);
   }
 
 
-  onCardPointerMove(
-    event: PointerEvent
+  /*    
+     ACCOUNT SECTION NAVIGATION
+      */
+
+  goToAccountSection(
+    section: 'card' | 'details'
   ): void {
+    if (this.isSectionAnimating) {
+      return;
+    }
 
-    const wrapper =
-      event.currentTarget as HTMLElement;
+    this.activeAccountSection = section;
+    this.isSectionAnimating = true;
 
+    const target =
+      section === 'card'
+        ? this.cardView
+        : this.detailsView;
 
-    /*
-      PC
+    target.nativeElement
+      .scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
 
-      Tilt-ul functioneaza
-      normal cu hover-ul.
-    */
+    setTimeout(() => {
+      this.isSectionAnimating = false;
+    }, 700);
+  }
 
-    if (event.pointerType === 'mouse') {
+  onAccountWheel(
+    event: WheelEvent
+  ): void {
+    if (this.isSectionAnimating) {
+      event.preventDefault();
+      return;
+    }
 
-      this.applyCardTilt(
-        event,
-        wrapper
+    if (
+      event.deltaY > 5 &&
+      this.activeAccountSection ===
+        'card'
+    ) {
+      event.preventDefault();
+
+      this.goToAccountSection(
+        'details'
       );
 
       return;
     }
 
+    if (
+      event.deltaY < -5 &&
+      this.activeAccountSection ===
+        'details'
+    ) {
+      event.preventDefault();
+
+      this.goToAccountSection(
+        'card'
+      );
+    }
+  }
+
+  onAccountScroll(
+    event: Event
+  ): void {
+    /*
+      La click / wheel controlat, starea este
+      deja setata de goToAccountSection().
+      Evitam schimbari intermediare in timpul
+      animatiei de scroll.
+    */
+    if (this.isSectionAnimating) {
+      return;
+    }
+
+    const container =
+      event.currentTarget;
+
+    if (
+      !(container instanceof HTMLElement) ||
+      !this.cardView ||
+      !this.detailsView
+    ) {
+      return;
+    }
+
+    const containerRect =
+      container.getBoundingClientRect();
+
+    const cardRect =
+      this.cardView
+        .nativeElement
+        .getBoundingClientRect();
+
+    const detailsRect =
+      this.detailsView
+        .nativeElement
+        .getBoundingClientRect();
+
+    const getVisibleHeight = (
+      rect: DOMRect
+    ): number => {
+      const top =
+        Math.max(
+          rect.top,
+          containerRect.top
+        );
+
+      const bottom =
+        Math.min(
+          rect.bottom,
+          containerRect.bottom
+        );
+
+      return Math.max(
+        0,
+        bottom - top
+      );
+    };
+
+    const cardVisible =
+      getVisibleHeight(cardRect);
+
+    const detailsVisible =
+      getVisibleHeight(detailsRect);
 
     /*
-      TELEFON / TABLETA
-
-      Tilt-ul functioneaza
-      numai dupa HOLD.
+      Zona mica neutra pentru a evita
+      licarirea cand ambele sectiuni sunt
+      aproape la fel de vizibile.
     */
+    if (
+      Math.abs(
+        cardVisible -
+        detailsVisible
+      ) < 20
+    ) {
+      return;
+    }
+
+    this.activeAccountSection =
+      cardVisible > detailsVisible
+        ? 'card'
+        : 'details';
+  }
+
+
+  /*    
+     CARD HELPERS
+      */
+
+  getMaskedNumber(
+    number: string
+  ): string {
+    return (
+      `.... .... .... ` +
+      `${number.slice(-4)}`
+    );
+  }
+
+  selectCard(
+    index: number
+  ): void {
+    if (
+      this.isCarouselAnimating ||
+      index === this.activeCardIndex
+    ) {
+      return;
+    }
+
+    if (
+      Math.abs(
+        index -
+        this.activeCardIndex
+      ) !== 1
+    ) {
+      return;
+    }
+
+    this.isCarouselAnimating = true;
+    this.isCardFlipped = false;
+    this.activeCardIndex = index;
+
+    setTimeout(() => {
+      this.isCarouselAnimating = false;
+    }, 560);
+  }
+
+  previous(): void {
+    if (
+      this.activeCardIndex > 0
+    ) {
+      this.selectCard(
+        this.activeCardIndex - 1
+      );
+    }
+  }
+
+  next(): void {
+    if (
+      this.activeCardIndex <
+      this.cards.length - 1
+    ) {
+      this.selectCard(
+        this.activeCardIndex + 1
+      );
+    }
+  }
+
+  toggleCard(): void {
+    if (this.isCarouselAnimating) {
+      return;
+    }
+
+    this.isCardFlipped =
+      !this.isCardFlipped;
+  }
+
+
+  /*    
+     CARD POINTER / TOUCH
+      */
+
+  onCardPointerDown(
+    event: PointerEvent,
+    index: number
+  ): void {
+    if (
+      index !== this.activeCardIndex ||
+      this.isCarouselAnimating
+    ) {
+      return;
+    }
+
+    const wrapper =
+      event.currentTarget;
+
+    if (
+      !(wrapper instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    if (
+      event.pointerType === 'mouse'
+    ) {
+      this.triggerTurbulence(
+        wrapper
+      );
+      return;
+    }
+
+    this.activePointerId =
+      event.pointerId;
+
+    this.touchHoldActive = false;
+
+    wrapper.setPointerCapture(
+      event.pointerId
+    );
+
+    this.holdTimer =
+      setTimeout(() => {
+        this.touchHoldActive = true;
+
+        this.applyCardTilt(
+          event,
+          wrapper
+        );
+      }, 250);
+  }
+
+  onCardPointerMove(
+    event: PointerEvent,
+    index: number
+  ): void {
+    if (
+      index !== this.activeCardIndex ||
+      this.isCarouselAnimating
+    ) {
+      return;
+    }
+
+    const wrapper =
+      event.currentTarget;
+
+    if (
+      !(wrapper instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    if (
+      event.pointerType === 'mouse'
+    ) {
+      this.applyCardTilt(
+        event,
+        wrapper
+      );
+      return;
+    }
 
     if (
       this.touchHoldActive &&
       event.pointerId ===
         this.activePointerId
     ) {
-
       this.applyCardTilt(
         event,
         wrapper
@@ -138,172 +639,125 @@ export class Account {
     }
   }
 
-
   onCardPointerUp(
-    event: PointerEvent
+    event: PointerEvent,
+    index: number
   ): void {
-
-    const wrapper =
-      event.currentTarget as HTMLElement;
-
-
-    /*
-      Mouse-ul nu are nevoie
-      de acest comportament.
-    */
-
-    if (event.pointerType === 'mouse') {
-
+    if (
+      index !== this.activeCardIndex
+    ) {
       return;
     }
 
+    const wrapper =
+      event.currentTarget;
 
-    /*
-      Anulam timer-ul HOLD.
-    */
-
-    if (this.holdTimer !== null) {
-
-      clearTimeout(
-        this.holdTimer
-      );
-
-      this.holdTimer =
-        null;
+    if (
+      !(wrapper instanceof HTMLElement)
+    ) {
+      return;
     }
 
+    if (
+      event.pointerType === 'mouse'
+    ) {
+      return;
+    }
 
-    /*
-      TAP rapid
-
-      => turbulence
-    */
+    this.clearHoldTimer();
 
     if (!this.touchHoldActive) {
-
       this.triggerTurbulence(
         wrapper
       );
     }
 
-
-    /*
-      HOLD terminat
-
-      => cardul revine la pozitia
-      initiala.
-    */
-
     this.resetCardTilt(
       wrapper
     );
 
-
-    this.touchHoldActive =
-      false;
-
-    this.activePointerId =
-      null;
+    this.touchHoldActive = false;
+    this.activePointerId = null;
   }
-
 
   onCardPointerLeave(
     event: PointerEvent
   ): void {
-
     const wrapper =
-      event.currentTarget as HTMLElement;
-
-
-    /*
-      Doar mouse-ul are hover.
-    */
+      event.currentTarget;
 
     if (
-      event.pointerType ===
-      'mouse'
+      !(wrapper instanceof HTMLElement)
     ) {
+      return;
+    }
 
+    if (
+      event.pointerType === 'mouse'
+    ) {
       this.resetCardTilt(
         wrapper
       );
     }
   }
 
-
   onCardPointerCancel(
     event: PointerEvent
   ): void {
-
     const wrapper =
-      event.currentTarget as HTMLElement;
+      event.currentTarget;
 
-
-    if (this.holdTimer !== null) {
-
-      clearTimeout(
-        this.holdTimer
-      );
-
-      this.holdTimer =
-        null;
+    if (
+      !(wrapper instanceof HTMLElement)
+    ) {
+      return;
     }
 
+    this.clearHoldTimer();
 
-    this.touchHoldActive =
-      false;
-
-    this.activePointerId =
-      null;
-
+    this.touchHoldActive = false;
+    this.activePointerId = null;
 
     this.resetCardTilt(
       wrapper
     );
   }
 
+  private clearHoldTimer(): void {
+    if (!this.holdTimer) {
+      return;
+    }
+
+    clearTimeout(
+      this.holdTimer
+    );
+
+    this.holdTimer = null;
+  }
+
+
+  /*    
+     CARD PHYSICS / LIGHT
+      */
 
   private applyCardTilt(
     event: PointerEvent,
     wrapper: HTMLElement
   ): void {
-
     const rect =
       wrapper.getBoundingClientRect();
 
-
-    /*
-      Pozitia cursorului/degetului
-      in interiorul cardului.
-    */
-
     const mouseX =
-      event.clientX -
-      rect.left;
+      event.clientX - rect.left;
 
     const mouseY =
-      event.clientY -
-      rect.top;
-
+      event.clientY - rect.top;
 
     const centerX =
       rect.width / 2;
 
     const centerY =
       rect.height / 2;
-
-
-    /*
-      Coordonate normalizate.
-
-      stanga = -1
-      centru = 0
-      dreapta = 1
-
-      sus = -1
-      centru = 0
-      jos = 1
-    */
 
     const rawX =
       (mouseX - centerX) /
@@ -313,57 +767,28 @@ export class Account {
       (mouseY - centerY) /
       centerY;
 
-
-    /*
-      Distanta fata de centru.
-    */
-
     const distance =
       Math.sqrt(
         rawX * rawX +
         rawY * rawY
       );
 
-
-    /*
-      Zona mica din centru
-      unde cardul ramane drept.
-    */
-
     const deadZone = 0.05;
-
 
     let rotateX = 0;
     let rotateY = 0;
 
-    let lightAngle = 135;
+    let lightX = 50;
+    let lightY = 50;
 
     let lightingOpacity = 0;
 
-
-    if (
-      distance >
-      deadZone
-    ) {
-
-      /*
-        Directia cursorului
-        fata de centru.
-      */
-
+    if (distance > deadZone) {
       const directionX =
         rawX / distance;
 
       const directionY =
         rawY / distance;
-
-
-      /*
-        Intensitatea efectului.
-
-        0 = centru
-        1 = margine
-      */
 
       let strength =
         (
@@ -378,7 +803,6 @@ export class Account {
           deadZone
         );
 
-
       strength =
         Math.max(
           0,
@@ -388,40 +812,13 @@ export class Account {
           )
         );
 
-
-      /*
-        Reactie mai rapida
-        dupa iesirea din centru.
-      */
-
       strength =
         Math.pow(
           strength,
           0.72
         );
 
-
-      /*
-        Cat de mult se inclina
-        cardul.
-      */
-
       const maxTilt = 11;
-
-
-      /*
-        Cursor SUS
-        => partea de sus coboara
-
-        Cursor JOS
-        => partea de jos coboara
-
-        Cursor STANGA
-        => partea stanga coboara
-
-        Cursor DREAPTA
-        => partea dreapta coboara
-      */
 
       rotateX =
         -directionY *
@@ -433,77 +830,32 @@ export class Account {
         maxTilt *
         strength;
 
+      const normalizedTiltX =
+        rotateX / maxTilt;
+
+      const normalizedTiltY =
+        rotateY / maxTilt;
 
       /*
-        =================================
-        LUMINA
-        =================================
-
-        Vrem lumina OPUSA cursorului.
-
-        Cursor dreapta
-        => lumina stanga
-
-        Cursor stanga
-        => lumina dreapta
-
-        Cursor sus
-        => lumina jos
-
-        Cursor jos
-        => lumina sus
+        Lumina este calculata din inclinarea
+        cardului, nu direct din cursor.
       */
+      lightX =
+        50 -
+        normalizedTiltY * 45;
 
-
-      const oppositeX =
-        -directionX;
-
-      const oppositeY =
-        -directionY;
-
-
-      /*
-        Transformam directia opusa
-        intr-un unghi CSS.
-
-        + 90 ne ajuta sa potrivim
-        orientarea gradientului cu
-        suprafata cardului.
-      */
-
-      lightAngle =
-        Math.atan2(
-          oppositeY,
-          oppositeX
-        ) *
-        180 /
-        Math.PI +
-        90;
-
-
-      /*
-        Cu cat ne apropiem de margine,
-        cu atat reflexia devine mai vizibila.
-      */
+      lightY =
+        50 +
+        normalizedTiltX * 45;
 
       lightingOpacity =
-        0.20 +
-        strength * 0.65;
+        0.18 +
+        strength * 0.68;
     }
-
-
-    /*
-      Activam starea de tilt.
-    */
 
     wrapper.classList.add(
       'is-tilting'
     );
-
-
-    /*
-      Tilt.
-    */
 
     wrapper.style.setProperty(
       '--tilt-x',
@@ -515,14 +867,14 @@ export class Account {
       `${rotateY}deg`
     );
 
-
-    /*
-      Lumina.
-    */
+    wrapper.style.setProperty(
+      '--light-x',
+      `${lightX}%`
+    );
 
     wrapper.style.setProperty(
-      '--light-angle',
-      `${lightAngle}deg`
+      '--light-y',
+      `${lightY}%`
     );
 
     wrapper.style.setProperty(
@@ -531,15 +883,12 @@ export class Account {
     );
   }
 
-
   private resetCardTilt(
     wrapper: HTMLElement
   ): void {
-
     wrapper.classList.remove(
       'is-tilting'
     );
-
 
     wrapper.style.setProperty(
       '--tilt-x',
@@ -551,11 +900,15 @@ export class Account {
       '0deg'
     );
 
+    wrapper.style.setProperty(
+      '--light-x',
+      '50%'
+    );
 
-    /*
-      Stingem reflexia cand
-      cursorul/degetul pleaca.
-    */
+    wrapper.style.setProperty(
+      '--light-y',
+      '50%'
+    );
 
     wrapper.style.setProperty(
       '--lighting-opacity',
@@ -563,41 +916,99 @@ export class Account {
     );
   }
 
-
   private triggerTurbulence(
     wrapper: HTMLElement
   ): void {
-
-    /*
-      Scoatem clasa pentru ca
-      animatia sa poata fi pornita
-      din nou imediat.
-    */
-
     wrapper.classList.remove(
       'is-turbulent'
     );
 
-
-    /*
-      Forceaza browserul sa recalculeze
-      layout-ul si permite retrigger-ul.
-    */
-
     void wrapper.offsetWidth;
-
 
     wrapper.classList.add(
       'is-turbulent'
     );
 
-
     setTimeout(() => {
-
       wrapper.classList.remove(
         'is-turbulent'
       );
-
     }, 300);
+  }
+
+
+  /*    
+     PROFILE / ACCOUNT HELPERS
+      */
+
+  toggleProfileMenu(): void {
+    this.isProfileMenuOpen =
+      !this.isProfileMenuOpen;
+  }
+
+  signOut(): void {
+    localStorage.removeItem(
+      'token'
+    );
+
+    this.isProfileMenuOpen = false;
+
+    this.router.navigate([
+      '/login'
+    ]);
+  }
+
+  formatDateOfBirth(
+    dateOfBirth?: string
+  ): string {
+    if (!dateOfBirth) {
+      return '—';
+    }
+
+    const datePart =
+      dateOfBirth.substring(
+        0,
+        10
+      );
+
+    const [
+      year,
+      month,
+      day
+    ] = datePart.split('-');
+
+    if (
+      !year ||
+      !month ||
+      !day
+    ) {
+      return dateOfBirth;
+    }
+
+    return `${day}/${month}/${year}`;
+  }
+
+  openChangePasswordDialog(): void {
+    if (!this.userDetails) {
+      return;
+    }
+
+    this.dialog.open(
+      ChangePasswordDialog,
+      {
+        width: '440px',
+
+        maxWidth:
+          'calc(100vw - 24px)',
+
+        data: {
+          email:
+            this.userDetails.email
+        },
+
+        panelClass:
+          'owlbank-password-dialog'
+      }
+    );
   }
 }

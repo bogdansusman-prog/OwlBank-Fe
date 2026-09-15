@@ -35,12 +35,33 @@
     </div>
 
 
-    <button
-      class="profile-button"
-      type="button"
-    >
-      <mat-icon>account_circle</mat-icon>
-    </button>
+    <div class="profile-menu-wrapper">
+
+  <button
+    type="button"
+    class="profile-button"
+    aria-label="Profile"
+    (click)="toggleProfileMenu()"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  @if (isProfileMenuOpen) {
+    <div class="profile-popover">
+
+      <button
+        type="button"
+        class="sign-out-button"
+        (click)="signOut()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
+
+    </div>
+  }
+
+</div>
 
   </nav>
 
