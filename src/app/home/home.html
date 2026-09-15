@@ -124,6 +124,8 @@
       Recent Transactions
     </h2>
 
+    
+
     <a
       routerLink="/statements"
       class="view-all"
@@ -210,7 +212,11 @@
           <!-- DATE -->
 
           <div class="transaction-date">
-            {{ transaction.date }}
+            {{
+              formatTransactionDate(
+              transaction.date
+            )
+            }}
           </div>
 
 

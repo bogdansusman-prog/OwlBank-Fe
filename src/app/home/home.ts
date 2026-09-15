@@ -1,132 +1,356 @@
-import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AsyncPipe } from '@angular/common';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID
+} from '@angular/core';
 
-import { UserService } from '../services/user';
-import { BehaviorSubject } from 'rxjs';
+import {
+  AsyncPipe,
+  isPlatformBrowser
+} from '@angular/common';
 
-interface HomeTransaction{
-  id: string;
-  type: 'deposit' | 'withdrawal' | 'transfer';
-  description: string;
-  amount: number;
-  date: string; 
-}
+import {
+  Router,
+  RouterLink
+} from '@angular/router';
+
+import {
+  MatIconModule
+} from '@angular/material/icon';
+
+import {
+  HttpErrorResponse
+} from '@angular/common/http';
+
+import {
+  BehaviorSubject,
+  interval,
+  Subscription
+} from 'rxjs';
+
+import {
+  UserService
+} from '../services/user';
+
+import {
+  Transaction,
+  TransactionService
+} from '../services/transaction';
+
 
 @Component({
   selector: 'app-home',
+
   imports: [
     RouterLink,
     MatIconModule,
     AsyncPipe
   ],
+
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
+export class Home
+  implements OnInit, OnDestroy {
 
-export class Home implements OnInit {
 
-  balance = new BehaviorSubject<number>(0);
-  isBalanceLoading = new BehaviorSubject<boolean>(true);
+  /* =========================================================
+     BALANCE
+  ========================================================= */
+
+  balance =
+    new BehaviorSubject<number>(0);
+
+  isBalanceLoading =
+    new BehaviorSubject<boolean>(true);
+
   balanceError = '';
 
-  transactions: HomeTransaction[] = [
-  {
-    id: '1',
-    type: 'deposit',
-    description: 'Salary',
-    amount: 5000,
-    date: '26 Aug 2026'
-  },
-  {
-    id: '2',
-    type: 'withdrawal',
-    description: 'Shopping',
-    amount: -250,
-    date: '25 Aug 2026'
-  },
-  {
-    id: '3',
-    type: 'transfer',
-    description: 'Transfer to 0722123456',
-    amount: -500,
-    date: '24 Aug 2026'
-  },
-  {
-    id: '4',
-    type: 'deposit',
-    description: 'Freelance',
-    amount: 1200,
-    date: '23 Aug 2026'
-  },
-  {
-    id: '5',
-    type: 'withdrawal',
-    description: 'ATM Withdrawal',
-    amount: -100,
-    date: '22 Aug 2026'
-  },
-  {
-    id: '6',
-    type: 'transfer',
-    description: 'Transfer to 0744556677',
-    amount: -350,
-    date: '21 Aug 2026'
-  },
-  {
-    id: '7',
-    type: 'deposit',
-    description: 'Refund',
-    amount: 180,
-    date: '20 Aug 2026'
-  }
-];
 
-  private platformId = inject(PLATFORM_ID);
+  /* =========================================================
+     TRANSACTIONS
+  ========================================================= */
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) {}
+  transactions:
+    Transaction[] = [];
 
-  ngOnInit(): void {
-     if (isPlatformBrowser(this.platformId)) {
-    this.loadBalance();
-     }
-  }
+  isTransactionsLoading = true;
 
-  loadBalance(): void {
-    this.balanceError = '';
+  transactionsError = '';
 
-    this.userService.getBalance().subscribe({
-      next: (balance: number) => {
-        this.balance.next(balance);
-        this.isBalanceLoading.next(false);
-      },
 
-      error: (error: HttpErrorResponse) => {
-        this.isBalanceLoading.next(false);
-        this.balanceError = 'Could not load balance.';
+  /* =========================================================
+     PROFILE
+  ========================================================= */
 
-        console.error('Balance request failed:', error.status);
-      }
-    });
-  }
   isProfileMenuOpen = false;
 
-toggleProfileMenu(): void {
-  this.isProfileMenuOpen = !this.isProfileMenuOpen;
+
+  /* =========================================================
+     INTERNAL
+  ========================================================= */
+
+  private platformId =
+    inject(PLATFORM_ID);
+
+  private refreshSubscription:
+    Subscription | null = null;
+
+
+  /* =========================================================
+     CONSTRUCTOR
+  ========================================================= */
+
+  constructor(
+    private userService:
+      UserService,
+
+    private transactionService:
+      TransactionService,
+
+    private router:
+      Router
+  ) {}
+
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+
+  ngOnInit(): void {
+
+    if (
+      !isPlatformBrowser(
+        this.platformId
+      )
+    ) {
+      return;
+    }
+
+
+    /*
+      Prima încărcare.
+    */
+
+    this.loadBalance();
+
+    this.loadTransactions();
+
+
+    /*
+      Refresh automat la fiecare 2 secunde.
+
+      false = nu afișăm loading-ul de fiecare
+      dată, ca să nu pâlpâie pagina.
+    */
+
+    this.refreshSubscription =
+      interval(2000)
+        .subscribe(() => {
+
+          this.loadBalance(
+            false
+          );
+
+          this.loadTransactions(
+            false
+          );
+
+        });
+  }
+
+
+  /* =========================================================
+     DESTROY
+  ========================================================= */
+
+  ngOnDestroy(): void {
+
+    this.refreshSubscription
+      ?.unsubscribe();
+  }
+
+
+  /* =========================================================
+     BALANCE
+  ========================================================= */
+
+  loadBalance(
+    showLoading = true
+  ): void {
+
+    if (showLoading) {
+
+      this.isBalanceLoading.next(
+        true
+      );
+    }
+
+
+    this.balanceError = '';
+
+
+    this.userService
+      .getBalance()
+      .subscribe({
+
+        next: (
+          balance: number
+        ) => {
+
+          this.balance.next(
+            balance
+          );
+
+          this.isBalanceLoading.next(
+            false
+          );
+        },
+
+
+        error: (
+          error:
+            HttpErrorResponse
+        ) => {
+
+          this.isBalanceLoading.next(
+            false
+          );
+
+          this.balanceError =
+            'Could not load balance.';
+
+
+          console.error(
+            'Balance request failed:',
+            error.status
+          );
+        }
+
+      });
+  }
+
+
+  /* =========================================================
+     TRANSACTIONS
+  ========================================================= */
+
+  loadTransactions(
+    showLoading = true
+  ): void {
+
+    if (showLoading) {
+
+      this.isTransactionsLoading =
+        true;
+    }
+
+
+    this.transactionsError = '';
+
+
+    this.transactionService
+      .getTransactions()
+      .subscribe({
+
+        next: (
+  transactions: Transaction[]
+) => {
+
+  this.transactions =
+    [...transactions]
+      .sort(
+        (first, second) =>
+          new Date(second.date).getTime() -
+          new Date(first.date).getTime()
+      );
+
+  console.log(
+    'AFTER ASSIGN:',
+    this.transactions.length,
+    this.transactions.map(t => ({
+      id: t.id,
+      description: t.description,
+      amount: t.amount,
+      date: t.date
+    }))
+  );
+
+  this.isTransactionsLoading = false;
+},
+
+
+        error: (
+          error:
+            HttpErrorResponse
+        ) => {
+
+          this.isTransactionsLoading =
+            false;
+
+          this.transactionsError =
+            'Could not load transactions.';
+
+
+          console.error(
+            'Transactions request failed:',
+            error.status
+          );
+        }
+
+      });
+  }
+
+
+  /* =========================================================
+     TRANSACTION DATE
+  ========================================================= */
+
+  formatTransactionDate(
+    date: string
+  ): string {
+
+    const transactionDate =
+      new Date(date);
+
+
+    return new Intl.DateTimeFormat(
+      'en-GB',
+      {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }
+    ).format(
+      transactionDate
+    );
+  }
+
+
+  /* =========================================================
+     PROFILE MENU
+  ========================================================= */
+
+  toggleProfileMenu(): void {
+
+    this.isProfileMenuOpen =
+      !this.isProfileMenuOpen;
+  }
+
+
+  signOut(): void {
+
+    localStorage.removeItem(
+      'token'
+    );
+
+    this.isProfileMenuOpen =
+      false;
+
+    this.router.navigate([
+      '/login'
+    ]);
+  }
 }
-
-signOut(): void {
-  localStorage.removeItem('token');
-
-  this.isProfileMenuOpen = false;
-
-  this.router.navigate(['/login']);
-}
-}
-
