@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   OnInit,
+  OnDestroy,
   ViewChild
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +13,8 @@ import {
   MatDialogModule
 } from '@angular/material/dialog';
 
+import { AsyncPipe } from '@angular/common';
+
 import {
   ChangePasswordDialog
 } from './change-password-dialog/change-password-dialog';
@@ -20,6 +23,18 @@ import {
   UserDetails,
   UserService
 } from '../services/user';
+
+import {
+  CardResponse,
+  CardService
+} from '../services/card';
+
+import {
+  BehaviorSubject,
+  interval,
+  Subscription
+} from 'rxjs';
+
 
 type EditableUserField =
   | 'email'
@@ -33,12 +48,13 @@ type EditableUserField =
     RouterLink,
     MatIconModule,
     MatDialogModule,
-    FormsModule
+    FormsModule,
+    AsyncPipe
   ],
   templateUrl: './account.html',
   styleUrl: './account.css'
 })
-export class Account implements OnInit {
+export class Account implements OnInit, OnDestroy {
 
   /*    
      ACCOUNT SECTIONS
@@ -97,43 +113,21 @@ export class Account implements OnInit {
 
   isProfileMenuOpen = false;
 
+//Actual cards
+cards = new BehaviorSubject<{
+  id: string;
+  number: string;
+  holder: string;
+  expiry: string;
+  cvv: string;
+  isBlocked: boolean;
+  isActive: boolean;
+}[]>([]);
 
-  /*    
-     TEMPORARY MOCK CARDS
-      */
-
-  cards = [
-    {
-      number: '4532 8912 7645 4821',
-      holder: 'OWL BANK USER',
-      expiry: '08/29',
-      cvv: '527'
-    },
-    {
-      number: '5198 2241 6732 1147',
-      holder: 'OWL BANK USER',
-      expiry: '11/29',
-      cvv: '314'
-    },
-    {
-      number: '4716 9034 2251 8890',
-      holder: 'OWL BANK USER',
-      expiry: '03/30',
-      cvv: '682'
-    },
-    {
-      number: '5521 3309 8821 5412',
-      holder: 'OWL BANK USER',
-      expiry: '07/30',
-      cvv: '193'
-    },
-    {
-      number: '4917 6432 1109 3748',
-      holder: 'OWL BANK USER',
-      expiry: '12/30',
-      cvv: '845'
-    }
-  ];
+isCardsLoading = true;
+cardsError = '';
+private cardsRefreshSubscription:
+  Subscription | null = null;
 
 
   /*    
@@ -141,14 +135,28 @@ export class Account implements OnInit {
       */
 
   constructor(
-    private userService: UserService,
-    private router: Router,
-    private dialog: MatDialog
-  ) {}
+  private userService: UserService,
+  private cardService: CardService,
+  private router: Router,
+  private dialog: MatDialog
+) {}
 
   ngOnInit(): void {
-    this.loadUserDetails();
-  }
+  this.loadUserDetails();
+
+  this.loadCards();
+
+  this.cardsRefreshSubscription =
+    interval(2000)
+      .subscribe(() => {
+        this.loadCards(false);
+      });
+}
+
+ngOnDestroy(): void {
+  this.cardsRefreshSubscription
+    ?.unsubscribe();
+}
 
 
   /*    
@@ -182,6 +190,115 @@ export class Account implements OnInit {
         }
       });
   }
+
+loadCards(
+  showLoading = true
+): void {
+
+  if (showLoading) {
+    this.isCardsLoading = true;
+  }
+
+  this.cardsError = '';
+
+  this.cardService
+    .getAllCards()
+    .subscribe({
+
+      next: (
+        cards: CardResponse[]
+      ) => {
+
+        const mappedCards =
+          cards.map(
+            card => ({
+              id:
+                card.id,
+
+              number:
+                this.formatCardNumber(
+                  card.cardNumber
+                ),
+
+              holder:
+                card.firstName
+                  .trim()
+                  .toUpperCase(),
+
+              expiry:
+                this.formatExpirationDate(
+                  card.expirationDate
+                ),
+
+              cvv:
+                card.cvv,
+
+              isBlocked:
+                card.isBlocked,
+
+              isActive:
+                card.isActive
+            })
+          );
+
+        this.cards.next(
+          mappedCards
+        );
+
+        if (
+          this.activeCardIndex >=
+          mappedCards.length
+        ) {
+          this.activeCardIndex = 0;
+        }
+
+        this.isCardsLoading = false;
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Cards request failed:',
+          error
+        );
+
+        this.cardsError =
+          'Could not load cards.';
+
+        this.isCardsLoading = false;
+      }
+    });
+}
+
+//CARD HELPERS
+private formatCardNumber(
+  cardNumber: string
+): string {
+  return cardNumber
+    .replace(/\s+/g, '')
+    .replace(/(.{4})/g, '$1 ')
+    .trim();
+}
+
+
+private formatExpirationDate(
+  expirationDate: string
+): string {
+  const date =
+    new Date(expirationDate);
+
+  const month =
+    String(
+      date.getUTCMonth() + 1
+    ).padStart(2, '0');
+
+  const year =
+    String(
+      date.getUTCFullYear()
+    ).slice(-2);
+
+  return `${month}/${year}`;
+}
 
   startEditing(
     field: EditableUserField
@@ -526,7 +643,7 @@ export class Account implements OnInit {
   next(): void {
     if (
       this.activeCardIndex <
-      this.cards.length - 1
+      this.cards.value.length - 1
     ) {
       this.selectCard(
         this.activeCardIndex + 1

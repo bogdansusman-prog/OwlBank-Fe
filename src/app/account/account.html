@@ -112,10 +112,10 @@
         >
 
           @for (
-            card of cards;
-            track $index;
-            let i = $index
-          ) {
+  card of (cards | async) ?? [];
+  track card.id;
+  let i = $index
+) {
 
             <div
               class="carousel-card"
@@ -397,10 +397,10 @@
           <div class="carousel-dots">
 
             @for (
-              card of cards;
-              track $index;
-              let i = $index
-            ) {
+  card of (cards | async) ?? [];
+  track card.id;
+  let i = $index
+) {
 
               <span
                 class="carousel-dot"
@@ -420,9 +420,10 @@
             class="mobile-arrow-button"
 
             [disabled]="
-              activeCardIndex ===
-              cards.length - 1
-            "
+  ((cards | async)?.length ?? 0) === 0 ||
+  activeCardIndex ===
+  ((cards | async)?.length ?? 0) - 1
+"
 
             (click)="next()"
 

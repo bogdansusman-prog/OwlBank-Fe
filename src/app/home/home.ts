@@ -73,8 +73,7 @@ export class Home
      TRANSACTIONS
   ========================================================= */
 
-  transactions:
-    Transaction[] = [];
+  transactions = new BehaviorSubject<Transaction[]>([]);
 
   isTransactionsLoading = true;
 
@@ -259,24 +258,14 @@ export class Home
   transactions: Transaction[]
 ) => {
 
-  this.transactions =
-    [...transactions]
-      .sort(
-        (first, second) =>
-          new Date(second.date).getTime() -
-          new Date(first.date).getTime()
-      );
-
-  console.log(
-    'AFTER ASSIGN:',
-    this.transactions.length,
-    this.transactions.map(t => ({
-      id: t.id,
-      description: t.description,
-      amount: t.amount,
-      date: t.date
-    }))
-  );
+  this.transactions.next(
+  [...transactions]
+    .sort(
+      (first, second) =>
+        new Date(second.date).getTime() -
+        new Date(first.date).getTime()
+    )
+);
 
   this.isTransactionsLoading = false;
 },
