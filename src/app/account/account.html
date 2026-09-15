@@ -1,0 +1,866 @@
+<div class="account-page">
+
+  <!--   
+       NAVBAR
+    -->
+  <nav class="navbar">
+
+    <div class="brand">
+      OwlBank
+    </div>
+
+    <!-- DOAR PE TELEFON -->
+    <a
+      routerLink="/home"
+      class="mobile-home-button"
+      aria-label="Home"
+    >
+      <mat-icon>home</mat-icon>
+    </a>
+
+    <!-- PC / TABLETĂ -->
+    <div class="nav-links">
+
+      <a routerLink="/home">
+        <mat-icon>home</mat-icon>
+        <span class="nav-text">Home</span>
+      </a>
+
+      <a
+        routerLink="/account"
+        class="active"
+      >
+        <mat-icon>person</mat-icon>
+        <span class="nav-text">Account</span>
+      </a>
+
+      <a routerLink="/transfer">
+        <mat-icon>swap_horiz</mat-icon>
+        <span class="nav-text">Transfer</span>
+      </a>
+
+      <a routerLink="/statements">
+        <mat-icon>description</mat-icon>
+        <span class="nav-text">Statements</span>
+      </a>
+
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile-menu-wrapper">
+
+  <button
+    type="button"
+    class="profile-button"
+    aria-label="Profile"
+    (click)="toggleProfileMenu()"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  @if (isProfileMenuOpen) {
+
+    <div class="profile-popover">
+
+      <button
+        type="button"
+        class="sign-out-button"
+        (click)="signOut()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
+
+    </div>
+
+  }
+
+</div>
+
+  </nav>
+
+
+  <!--   
+       ACCOUNT CONTENT
+    -->
+  <main class="account-content">
+
+    <div
+  class="account-sections"
+  (wheel)="onAccountWheel($event)"
+  (scroll)="onAccountScroll($event)"
+>
+
+      <!--    
+           SCREEN 1 - CARD
+         = -->
+      <section
+        #cardView
+        class="account-view card-view"
+      >
+
+    <!--    
+         CARD CAROUSEL
+       = -->
+    <section class="card-section">
+
+      <div class="carousel-viewport">
+
+        <div
+          class="cards-track"
+          [style.--active-index]="activeCardIndex"
+        >
+
+          @for (
+            card of cards;
+            track $index;
+            let i = $index
+          ) {
+
+            <div
+              class="carousel-card"
+
+              [class.is-active]="
+                i === activeCardIndex
+              "
+
+              [class.is-left]="
+                i === activeCardIndex - 1
+              "
+
+              [class.is-right]="
+                i === activeCardIndex + 1
+              "
+
+              [class.is-far-left]="
+                i < activeCardIndex - 1
+              "
+
+              [class.is-far-right]="
+                i > activeCardIndex + 1
+              "
+
+              (click)="selectCard(i)"
+            >
+
+              <!-- PHYSICS WRAPPER -->
+              <div
+                class="bank-card-hover"
+
+                (pointerdown)="
+                  onCardPointerDown(
+                    $event,
+                    i
+                  )
+                "
+
+                (pointermove)="
+                  onCardPointerMove(
+                    $event,
+                    i
+                  )
+                "
+
+                (pointerup)="
+                  onCardPointerUp(
+                    $event,
+                    i
+                  )
+                "
+
+                (pointerleave)="
+                  onCardPointerLeave(
+                    $event
+                  )
+                "
+
+                (pointercancel)="
+                  onCardPointerCancel(
+                    $event
+                  )
+                "
+              >
+
+                <!-- CARD -->
+                <div
+                  class="bank-card"
+
+                  [class.flipped]="
+                    isCardFlipped &&
+                    i === activeCardIndex
+                  "
+                >
+
+                  <div class="bank-card-inner">
+
+                    <!-- FRONT -->
+                    <div
+                      class="
+                        bank-card-face
+                        bank-card-front
+                      "
+                    >
+
+                      <div
+                        class="card-lighting"
+                        aria-hidden="true"
+                      ></div>
+
+                      <div class="card-top">
+
+                        <span class="card-brand">
+                          OwlBank
+                        </span>
+
+                        <img
+                          class="card-logo-image"
+                          src="owlbank-logo.png"
+                          alt="OwlBank"
+                        />
+
+                      </div>
+
+                      <div class="card-chip">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+
+                      <div class="masked-number">
+
+                        {{
+                          getMaskedNumber(
+                            card.number
+                          )
+                        }}
+
+                      </div>
+
+                      <div class="card-bottom">
+
+                        <div>
+
+                          <span>
+                            CARD HOLDER
+                          </span>
+
+                          <strong>
+                            {{ card.holder }}
+                          </strong>
+
+                        </div>
+
+                        <div>
+
+                          <span>
+                            EXPIRES
+                          </span>
+
+                          <strong>
+                            {{ card.expiry }}
+                          </strong>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+
+                    <!-- BACK -->
+                    <div
+                      class="
+                        bank-card-face
+                        bank-card-back
+                      "
+                    >
+
+                      <div
+                        class="card-lighting"
+                        aria-hidden="true"
+                      ></div>
+
+                      <div
+                        class="magnetic-strip"
+                      ></div>
+
+                      <div class="card-details">
+
+                        <div class="card-detail">
+
+                          <span>
+                            Card Number
+                          </span>
+
+                          <strong>
+                            {{ card.number }}
+                          </strong>
+
+                        </div>
+
+                        <div class="details-row">
+
+                          <div class="card-detail">
+
+                            <span>
+                              Expiry Date
+                            </span>
+
+                            <strong>
+                              {{ card.expiry }}
+                            </strong>
+
+                          </div>
+
+                          <div class="card-detail">
+
+                            <span>
+                              CVV
+                            </span>
+
+                            <strong>
+                              {{ card.cvv }}
+                            </strong>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      <div class="back-brand">
+                        OwlBank
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CONTROALE
+      ================================================== -->
+      <div class="card-controls">
+
+        <button
+          type="button"
+          class="reveal-card-button"
+          (click)="toggleCard()"
+          aria-label="Show card details"
+        >
+
+          <mat-icon>
+            {{
+              isCardFlipped
+                ? 'visibility_off'
+                : 'visibility'
+            }}
+          </mat-icon>
+
+        </button>
+
+
+        <div class="carousel-navigation">
+
+          <button
+            type="button"
+            class="mobile-arrow-button"
+
+            [disabled]="
+              activeCardIndex === 0
+            "
+
+            (click)="previous()"
+
+            aria-label="Previous card"
+          >
+
+            <mat-icon>
+              arrow_back
+            </mat-icon>
+
+          </button>
+
+
+          <div class="carousel-dots">
+
+            @for (
+              card of cards;
+              track $index;
+              let i = $index
+            ) {
+
+              <span
+                class="carousel-dot"
+
+                [class.active]="
+                  i === activeCardIndex
+                "
+              ></span>
+
+            }
+
+          </div>
+
+
+          <button
+            type="button"
+            class="mobile-arrow-button"
+
+            [disabled]="
+              activeCardIndex ===
+              cards.length - 1
+            "
+
+            (click)="next()"
+
+            aria-label="Next card"
+          >
+
+            <mat-icon>
+              arrow_forward
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+      </section>
+
+
+      <!--    
+           SCREEN 2 - ACCOUNT DETAILS
+         = -->
+      <section
+        #detailsView
+        class="account-view details-view"
+      >
+
+    <!--    
+         REAL ACCOUNT DATA
+       = -->
+    <section class="account-information">
+
+      @if (isUserDetailsLoading) {
+
+        <div class="account-loading">
+
+          <mat-icon>
+            sync
+          </mat-icon>
+
+          <span>
+            Loading account details...
+          </span>
+
+        </div>
+
+      } @else if (userDetailsError) {
+
+        <div class="account-error">
+
+          <mat-icon>
+            error_outline
+          </mat-icon>
+
+          <span>
+            {{ userDetailsError }}
+          </span>
+
+        </div>
+
+      } @else if (userDetails) {
+
+
+        <!-- ===============================================
+             ACCOUNT DETAILS
+        ================================================ -->
+        <section class="details-panel">
+
+          <div class="section-heading">
+
+            <div class="section-heading-icon">
+              <mat-icon>
+                person
+              </mat-icon>
+            </div>
+
+            <div>
+
+              <h2>
+                Account Details
+              </h2>
+
+              <p>
+                Your personal account information
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="details-grid">
+
+
+
+            <div class="detail-item editable-detail">
+
+  <span class="detail-label">
+    Email
+  </span>
+
+
+  @if (editingField !== 'email') {
+
+    <div class="editable-detail-content">
+
+      <span class="detail-value">
+        {{ userDetails.email }}
+      </span>
+
+      <button
+        type="button"
+        class="edit-detail-button"
+        aria-label="Edit email"
+        (click)="startEditing('email')"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+    </div>
+
+  } @else {
+
+    <div class="inline-edit-row">
+
+      <input
+        type="email"
+        class="inline-edit-input"
+        [(ngModel)]="editValue"
+        [disabled]="isSavingField"
+        (keyup.enter)="saveEditing('email')"
+        (keyup.escape)="cancelEditing()"
+      >
+
+
+      <button
+        type="button"
+        class="inline-edit-action save"
+        aria-label="Save email"
+        [disabled]="isSavingField"
+        (click)="saveEditing('email')"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+
+
+      <button
+        type="button"
+        class="inline-edit-action cancel"
+        aria-label="Cancel"
+        [disabled]="isSavingField"
+        (click)="cancelEditing()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+
+    @if (editFieldError) {
+
+      <span class="inline-edit-error">
+        {{ editFieldError }}
+      </span>
+
+    }
+
+  }
+
+</div>
+
+
+            <div class="detail-item editable-detail">
+
+  <span class="detail-label">
+    First Name
+  </span>
+
+  @if (editingField !== 'firstName') {
+
+    <div class="editable-detail-content">
+
+      <span class="detail-value">
+        {{ userDetails.firstName }}
+      </span>
+
+      <button
+        type="button"
+        class="edit-detail-button"
+        (click)="startEditing('firstName')"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+    </div>
+
+  } @else {
+
+    <div class="inline-edit-row">
+
+      <input
+        class="inline-edit-input"
+        [(ngModel)]="editValue"
+        [disabled]="isSavingField"
+        (keyup.enter)="saveEditing('firstName')"
+        (keyup.escape)="cancelEditing()"
+      >
+
+      <button
+        type="button"
+        class="inline-edit-action save"
+        (click)="saveEditing('firstName')"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+
+      <button
+        type="button"
+        class="inline-edit-action cancel"
+        (click)="cancelEditing()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+  }
+
+</div>
+
+
+            <div class="detail-item editable-detail">
+
+  <span class="detail-label">
+    Last Name
+  </span>
+
+  @if (editingField !== 'lastName') {
+
+    <div class="editable-detail-content">
+
+      <span class="detail-value">
+        {{ userDetails.lastName }}
+      </span>
+
+      <button
+        type="button"
+        class="edit-detail-button"
+        (click)="startEditing('lastName')"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+    </div>
+
+  } @else {
+
+    <div class="inline-edit-row">
+
+      <input
+        class="inline-edit-input"
+        [(ngModel)]="editValue"
+        [disabled]="isSavingField"
+        (keyup.enter)="saveEditing('lastName')"
+        (keyup.escape)="cancelEditing()"
+      >
+
+      <button
+        type="button"
+        class="inline-edit-action save"
+        (click)="saveEditing('lastName')"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+
+      <button
+        type="button"
+        class="inline-edit-action cancel"
+        (click)="cancelEditing()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+  }
+
+</div>
+
+
+            <div class="detail-item editable-detail">
+
+  <span class="detail-label">
+    Phone Number
+  </span>
+
+  @if (editingField !== 'phoneNumber') {
+
+    <div class="editable-detail-content">
+
+      <span class="detail-value">
+        {{ userDetails.phoneNumber }}
+      </span>
+
+      <button
+        type="button"
+        class="edit-detail-button"
+        (click)="startEditing('phoneNumber')"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+    </div>
+
+  } @else {
+
+    <div class="inline-edit-row">
+
+      <input
+        class="inline-edit-input"
+        [(ngModel)]="editValue"
+        [disabled]="isSavingField"
+        (keyup.enter)="saveEditing('phoneNumber')"
+        (keyup.escape)="cancelEditing()"
+      >
+
+      <button
+        type="button"
+        class="inline-edit-action save"
+        (click)="saveEditing('phoneNumber')"
+      >
+        <mat-icon>check</mat-icon>
+      </button>
+
+      <button
+        type="button"
+        class="inline-edit-action cancel"
+        (click)="cancelEditing()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+  }
+
+</div>
+              <div class="detail-item detail-item-wide">
+
+              <span class="detail-label">
+                Date of Birth
+              </span>
+
+              <span class="detail-value">
+                {{ formatDateOfBirth(userDetails.dateOfBirth) }}
+              </span>
+            </div>
+            <div class="detail-item password-detail">
+
+  <span class="detail-label">
+    Password
+  </span>
+
+  <div class="password-detail-content">
+
+    <span class="detail-value password-mask">
+      ••••••••••••
+    </span>
+
+    <button
+      type="button"
+      class="edit-password-button"
+      aria-label="Change password"
+      (click)="openChangePasswordDialog()"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+
+  </div>
+
+</div>
+
+          </div>
+
+        </section>
+
+
+
+
+      }
+
+    </section>
+
+      </section>
+
+    </div>
+
+
+    <!--    
+         SIDE NAVIGATION
+       = -->
+    <nav class="account-side-nav">
+
+  <button
+    type="button"
+    class="side-nav-item"
+    [class.active]="
+      activeAccountSection === 'card'
+    "
+    (click)="
+      goToAccountSection('card')
+    "
+  >
+    <mat-icon>credit_card</mat-icon>
+
+    <span>
+      Card
+    </span>
+  </button>
+
+
+  <button
+    type="button"
+    class="side-nav-item"
+    [class.active]="
+      activeAccountSection === 'details'
+    "
+    (click)="
+      goToAccountSection('details')
+    "
+  >
+    <mat-icon>person</mat-icon>
+
+    <span>
+      Account Details
+    </span>
+  </button>
+
+</nav>

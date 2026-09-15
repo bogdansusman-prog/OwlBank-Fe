@@ -35,12 +35,33 @@
     </div>
 
 
-    <button
-      class="profile-button"
-      type="button"
-    >
-      <mat-icon>account_circle</mat-icon>
-    </button>
+    <div class="profile-menu-wrapper">
+
+  <button
+    type="button"
+    class="profile-button"
+    aria-label="Profile"
+    (click)="toggleProfileMenu()"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  @if (isProfileMenuOpen) {
+    <div class="profile-popover">
+
+      <button
+        type="button"
+        class="sign-out-button"
+        (click)="signOut()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Sign Out</span>
+      </button>
+
+    </div>
+  }
+
+</div>
 
   </nav>
 
@@ -95,37 +116,136 @@
 
     <!-- RECENT TRANSACTIONS -->
 
-    <section class="transactions-card">
+<section class="transactions-card">
 
-      <div class="section-header">
+  <div class="section-header">
 
-        <h2>
-          Recent Transactions
-        </h2>
+    <h2>
+      Recent Transactions
+    </h2>
 
-        <a
-          routerLink="/statements"
-          class="view-all"
-        >
-          View all
+    <a
+      routerLink="/statements"
+      class="view-all"
+    >
+      View all
 
-          <mat-icon>
-            chevron_right
-          </mat-icon>
-        </a>
+      <mat-icon>
+        chevron_right
+      </mat-icon>
+    </a>
 
-      </div>
+  </div>
 
 
-      <div class="empty-transactions">
+  @if (transactions.length === 0) {
 
-        <p>
-          No transactions yet.
-        </p>
+    <div class="empty-transactions">
+      <p>No transactions yet.</p>
+    </div>
 
-      </div>
+  } @else {
 
-    </section>
+    <div class="transactions-list">
+
+      @for (
+        transaction of transactions;
+        track transaction.id
+      ) {
+
+        <div class="transaction-row">
+
+
+          <!-- ICON -->
+
+          <div
+            class="transaction-icon"
+            [class.deposit-icon]="transaction.type === 'deposit'"
+            [class.withdrawal-icon]="transaction.type === 'withdrawal'"
+            [class.transfer-icon]="transaction.type === 'transfer'"
+          >
+
+            @if (transaction.type === 'deposit') {
+              <mat-icon>south</mat-icon>
+            }
+
+            @if (transaction.type === 'withdrawal') {
+              <mat-icon>north</mat-icon>
+            }
+
+            @if (transaction.type === 'transfer') {
+              <mat-icon>swap_horiz</mat-icon>
+            }
+
+          </div>
+
+
+          <!-- INFO -->
+
+          <div class="transaction-info">
+
+            <strong>
+
+              @if (transaction.type === 'deposit') {
+                Deposit
+              }
+
+              @if (transaction.type === 'withdrawal') {
+                Withdrawal
+              }
+
+              @if (transaction.type === 'transfer') {
+                Transfer
+              }
+
+            </strong>
+
+            <span>
+              {{ transaction.description }}
+            </span>
+
+          </div>
+
+
+          <!-- DATE -->
+
+          <div class="transaction-date">
+            {{ transaction.date }}
+          </div>
+
+
+          <!-- AMOUNT -->
+
+          <div
+            class="transaction-amount"
+            [class.money-in]="transaction.amount > 0"
+            [class.money-out]="transaction.amount < 0"
+          >
+
+            @if (transaction.amount > 0) {
+              +
+            }
+
+            @if (transaction.amount < 0) {
+              -
+            }
+
+            ${{ transaction.amount < 0
+              ? -transaction.amount
+              : transaction.amount
+            }}
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</section>
 
 
     <!-- MOBILE QUICK NAVIGATION -->
