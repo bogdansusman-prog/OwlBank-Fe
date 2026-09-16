@@ -806,9 +806,14 @@ mat-icon {
 */
 
 .quick-actions {
-  display: none;
+  display: grid;
 
-  margin-top: 20px;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin-top: 12px;
 }
 
 
@@ -1057,23 +1062,157 @@ mat-icon {
   .quick-actions {
     display: grid;
 
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    gap: 16px;
+    gap: 10px;
 
     margin-top: 20px;
   }
 
-  .action-card {
+   .action-card {
     width: 100%;
-    min-height: 105px;
+    min-height: 84px;
 
-    padding: 20px;
+    padding: 12px 6px;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 6px;
+
+    text-align: center;
+
+    border-radius: 14px;
   }
 
-  .action-card:active {
-    transform:
-      scale(0.98);
+  .action-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+  }
+
+  .action-icon mat-icon {
+    width: 20px;
+    height: 20px;
+
+    font-size: 20px;
+  }
+
+  .action-card h3 {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .action-card p {
+    display: none;
+  }
+
+
+  /* =========================================
+     MOBILE TRANSACTIONS
+  ========================================= */
+
+  .transactions-list {
+    max-height: 88px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scroll-snap-type: y mandatory;
+
+    scrollbar-width: none;
+  }
+
+  .transactions-list::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  .transaction-row {
+    height: 88px;
+    min-height: 88px;
+
+    padding: 12px 8px;
+
+    display: grid;
+
+    grid-template-columns:
+      48px
+      minmax(0, 1fr)
+      max-content;
+
+    grid-template-areas:
+      "icon info amount"
+      "icon date amount";
+
+    column-gap: 12px;
+    row-gap: 3px;
+
+    align-items: center;
+
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+
+  .transaction-icon {
+    grid-area: icon;
+
+    align-self: center;
+  }
+
+
+  .transaction-info {
+    grid-area: info;
+
+    min-width: 0;
+
+    align-self: end;
+  }
+
+
+  .transaction-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+
+  /* Ascundem description pe telefon */
+  .transaction-info span {
+    display: none;
+  }
+
+
+  .transaction-date {
+    grid-area: date;
+
+    align-self: start;
+
+    text-align: left;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+  }
+
+
+  .transaction-amount {
+    grid-area: amount;
+
+    justify-self: end;
+    align-self: center;
+
+    padding-left: 8px;
+
+    white-space: nowrap;
+
+    font-size: 14px;
   }
 }
 
