@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../services/auth';
+import { getErrorMessage } from '../utils/error-message';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,8 @@ export class Login {
 
   errorMessage = '';
   isLoading = false;
+
+  showPassword = false;
 
   constructor(
     private router: Router,
@@ -48,23 +51,13 @@ export class Login {
 
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;
-
-        if (error.status === 0) {
-          this.errorMessage = 'Cannot connect to the server.';
-          return;
-        }
-
-        if (
-          typeof error.error === 'string' &&
-          error.error.trim()
-        ) {
-          this.errorMessage = error.error;
-          return;
-        }
-
-        this.errorMessage = 'Invalid email or password.';
+        this.errorMessage = getErrorMessage(error, 'Invalid email or password.');
       }
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   onButtonMouseMove(event: MouseEvent): void {

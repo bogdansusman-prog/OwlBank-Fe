@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import {
   MatDialog,
@@ -29,7 +29,8 @@ export class Transfer {
   transferSuccess = false;
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   openDeposit(): void {
@@ -100,4 +101,18 @@ export class Transfer {
       `${mouseY}px`
     );
   }
+  isProfileMenuOpen = false;
+
+toggleProfileMenu(): void {
+  this.isProfileMenuOpen =
+    !this.isProfileMenuOpen;
+}
+
+signOut(): void {
+  localStorage.removeItem('token');
+
+  this.isProfileMenuOpen = false;
+
+  this.router.navigate(['/login']);
+}
 }

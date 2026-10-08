@@ -1,0 +1,76 @@
+<div
+  class="status-dialog"
+  [class.activate-mode]="!isBlock"
+>
+
+  <div class="status-icon">
+
+    <mat-icon>
+      {{
+        isBlock
+          ? 'block'
+          : 'check_circle'
+      }}
+    </mat-icon>
+
+  </div>
+
+
+  <h2>
+    {{
+      isBlock
+        ? 'Block card?'
+        : 'Activate card?'
+    }}
+  </h2>
+
+
+  <p>
+    Are you sure you want to
+    {{ isBlock ? 'block' : 'activate' }}
+    the card ending in
+  </p>
+
+
+  <strong class="card-ending">
+    •••• {{ data.lastFourDigits }}
+  </strong>
+
+
+  <p class="description">
+
+    {{
+      isBlock
+        ? 'You can activate this card again later.'
+        : 'The card will become available for use again.'
+    }}
+
+  </p>
+
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+
+
+    <button
+      type="button"
+      class="confirm-button"
+      (click)="confirm()"
+    >
+      {{
+        isBlock
+          ? 'Block'
+          : 'Activate'
+      }}
+    </button>
+
+  </div>
+
+</div>

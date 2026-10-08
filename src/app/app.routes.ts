@@ -6,6 +6,7 @@ import { Transfer } from './transfer/transfer';
 import { ResetPassword } from './reset-password/reset-password';
 import { authGuard } from './guards/auth.guard';
 import { Statements } from './statements/statements';
+import { Account } from './account/account';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,11 @@ export const routes: Routes = [
   {
   path: 'statements',
   component: Statements,
+  canActivate: [authGuard]
+  },
+  {
+  path: 'account',
+  component: Account,
   canActivate: [authGuard]
   },
   {

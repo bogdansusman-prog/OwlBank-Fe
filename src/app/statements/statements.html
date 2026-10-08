@@ -1,1 +1,580 @@
-<p>statements works!</p>
+<div class="statements-page">
+
+  <nav class="navbar">
+
+    <div class="brand">
+      OwlBank
+    </div>
+
+
+    <a
+      routerLink="/home"
+      class="mobile-current-tab"
+      aria-label="Home"
+    >
+      <mat-icon>home</mat-icon>
+    </a>
+
+
+    <div class="nav-links">
+
+      <a routerLink="/home">
+        <mat-icon>home</mat-icon>
+        <span class="nav-text">
+          Home
+        </span>
+      </a>
+
+
+      <a routerLink="/account">
+        <mat-icon>person</mat-icon>
+        <span class="nav-text">
+          Account
+        </span>
+      </a>
+
+
+      <a routerLink="/transfer">
+        <mat-icon>
+          swap_horiz
+        </mat-icon>
+
+        <span class="nav-text">
+          Transfer
+        </span>
+      </a>
+
+
+      <a
+        routerLink="/statements"
+        class="active"
+      >
+        <mat-icon>
+          description
+        </mat-icon>
+
+        <span class="nav-text">
+          Statements
+        </span>
+      </a>
+
+    </div>
+
+
+    <div class="profile-menu-wrapper">
+
+      <button
+        type="button"
+        class="profile-button"
+        aria-label="Profile"
+        (click)="toggleProfileMenu()"
+      >
+        <mat-icon>
+          account_circle
+        </mat-icon>
+      </button>
+
+
+      @if (isProfileMenuOpen) {
+
+        <div class="profile-popover">
+
+          <button
+            type="button"
+            class="sign-out-button"
+            (click)="signOut()"
+          >
+            <mat-icon>
+              logout
+            </mat-icon>
+
+            <span>
+              Sign Out
+            </span>
+          </button>
+
+        </div>
+
+      }
+
+    </div>
+
+  </nav>
+
+
+  <main class="statements-content">
+
+    <header class="page-header">
+
+      <div class="page-title-row">
+
+        <div class="page-icon">
+          <mat-icon>
+            description
+          </mat-icon>
+        </div>
+
+        <div>
+
+          <h1>
+            Statements
+          </h1>
+
+          <p>
+            View your account activity
+            for a selected period.
+          </p>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="period-panel">
+
+      <div class="period-heading">
+
+        <div>
+
+          <span class="section-label">
+            STATEMENT PERIOD
+          </span>
+
+          <h2>
+            Select a date range
+          </h2>
+
+        </div>
+
+        <mat-icon>
+          date_range
+        </mat-icon>
+
+      </div>
+
+
+      <div class="period-controls">
+
+        <label class="date-field">
+
+          <span>
+            From
+          </span>
+
+          <input
+            type="date"
+            [(ngModel)]="fromDate"
+          >
+
+        </label>
+
+
+        <label class="date-field">
+
+          <span>
+            To
+          </span>
+
+          <input
+            type="date"
+            [(ngModel)]="toDate"
+          >
+
+        </label>
+
+
+        <button
+          type="button"
+          class="generate-button"
+          [disabled]="isStatementLoading"
+          (click)="generateStatement()"
+        >
+
+          <mat-icon>
+            {{
+              isStatementLoading
+                ? 'sync'
+                : 'receipt_long'
+            }}
+          </mat-icon>
+
+          <span>
+            {{
+              isStatementLoading
+                ? 'Loading...'
+                : 'Generate Statement'
+            }}
+          </span>
+
+        </button>
+
+      </div>
+
+
+      @if (statementError) {
+
+        <div class="statement-error">
+
+          <mat-icon>
+            error_outline
+          </mat-icon>
+
+          {{ statementError }}
+
+        </div>
+
+      }
+
+    </section>
+
+
+    <section class="statement-card">
+
+      <div class="statement-card-header">
+
+        <div>
+
+          <span class="statement-bank">
+            OWLBANK
+          </span>
+
+          <h2>
+            Account Statement
+          </h2>
+
+          <p>
+            {{ formatDate(appliedFromDate) }}
+            —
+            {{ formatDate(appliedToDate) }}
+          </p>
+
+        </div>
+
+
+        <div class="statement-document-icon">
+          <mat-icon>
+            account_balance
+          </mat-icon>
+        </div>
+
+      </div>
+
+
+      <div class="summary-grid">
+
+        <div class="summary-card">
+
+          <div class="summary-icon">
+            <mat-icon>
+              account_balance_wallet
+            </mat-icon>
+          </div>
+
+          <div>
+
+            <span>
+              Opening Balance
+            </span>
+
+            <strong>
+              @if (
+                openingBalance !== null
+              ) {
+                {{
+                  formatCurrency(
+                    openingBalance
+                  )
+                }}
+                RON
+              } @else {
+                —
+              }
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-card income">
+
+          <div class="summary-icon">
+            <mat-icon>
+              south_west
+            </mat-icon>
+          </div>
+
+          <div>
+
+            <span>
+              Money In
+            </span>
+
+            <strong>
+              +
+              {{
+                formatCurrency(
+                  moneyIn
+                )
+              }}
+              RON
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-card expense">
+
+          <div class="summary-icon">
+            <mat-icon>
+              north_east
+            </mat-icon>
+          </div>
+
+          <div>
+
+            <span>
+              Money Out
+            </span>
+
+            <strong>
+              -
+              {{
+                formatCurrency(
+                  moneyOut
+                )
+              }}
+              RON
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-card closing">
+
+          <div class="summary-icon">
+            <mat-icon>
+              payments
+            </mat-icon>
+          </div>
+
+          <div>
+
+            <span>
+              Closing Balance
+            </span>
+
+            <strong>
+              @if (
+                closingBalance !== null
+              ) {
+                {{
+                  formatCurrency(
+                    closingBalance
+                  )
+                }}
+                RON
+              } @else {
+                —
+              }
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="transactions-header">
+
+        <div>
+
+          <span class="section-label">
+            ACTIVITY
+          </span>
+
+          <h3>
+            Transaction History
+          </h3>
+
+        </div>
+
+
+        <div class="type-filter">
+
+          <mat-icon>
+            filter_list
+          </mat-icon>
+
+          <select
+            [(ngModel)]="
+              transactionType
+            "
+          >
+
+            <option value="all">
+              All transactions
+            </option>
+
+            <option value="deposit">
+              Deposits
+            </option>
+
+            <option value="withdrawal">
+              Withdrawals
+            </option>
+
+            <option value="transfer">
+              Transfers
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="transactions-table">
+
+        <div class="table-header">
+
+          <span>
+            Date
+          </span>
+
+          <span>
+            Description
+          </span>
+
+          <span>
+            Type
+          </span>
+
+          <span class="align-right">
+            Amount
+          </span>
+
+        </div>
+
+
+        @for (
+          transaction
+          of periodTransactions;
+          track transaction.id
+        ) {
+
+          <div class="transaction-row">
+
+            <span class="transaction-date">
+              {{
+                formatDate(
+                  transaction.date
+                )
+              }}
+            </span>
+
+
+            <div class="transaction-description">
+
+              <div
+                class="transaction-type-icon"
+                [class.income]="
+                  transaction.amount > 0
+                "
+                [class.expense]="
+                  transaction.amount < 0
+                "
+              >
+
+                <mat-icon>
+                  {{
+                    transaction.amount > 0
+                      ? 'south_west'
+                      : 'north_east'
+                  }}
+                </mat-icon>
+
+              </div>
+
+              <span>
+                {{
+                  transaction.description
+                }}
+              </span>
+
+            </div>
+
+
+            <span class="type-badge">
+              {{ transaction.type }}
+            </span>
+
+
+            <strong
+              class="transaction-amount"
+              [class.positive]="
+                transaction.amount > 0
+              "
+              [class.negative]="
+                transaction.amount < 0
+              "
+            >
+
+              {{
+                transaction.amount > 0
+                  ? '+'
+                  : transaction.amount < 0
+                    ? '-'
+                    : ''
+              }}
+
+              {{
+                formatCurrency(
+                  transaction.amount < 0
+                    ? -transaction.amount
+                    : transaction.amount
+                )
+              }}
+
+              RON
+
+            </strong>
+
+          </div>
+
+        } @empty {
+
+          <div class="empty-transactions">
+
+            <mat-icon>
+              receipt_long
+            </mat-icon>
+
+            <h3>
+              No transactions
+            </h3>
+
+            <p>
+              There are no transactions
+              for this period.
+            </p>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

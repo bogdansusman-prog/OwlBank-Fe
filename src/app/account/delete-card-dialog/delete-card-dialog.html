@@ -1,0 +1,52 @@
+<div class="delete-dialog">
+
+  <div class="delete-icon">
+    <mat-icon>
+      delete_outline
+    </mat-icon>
+  </div>
+
+
+  <h2>
+    Delete card?
+  </h2>
+
+
+  <p>
+    Are you sure you want to delete
+    the card ending in
+  </p>
+
+
+  <strong class="card-ending">
+    •••• {{ data.lastFourDigits }}
+  </strong>
+
+
+  <p class="warning">
+    This action cannot be undone.
+  </p>
+
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+
+
+    <button
+      type="button"
+      class="delete-button"
+      (click)="confirm()"
+    >
+      Delete
+    </button>
+
+  </div>
+
+</div>

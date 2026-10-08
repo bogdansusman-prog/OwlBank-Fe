@@ -1,0 +1,77 @@
+<div class="reveal-dialog">
+
+  <div class="security-icon">
+    <mat-icon>
+      lock
+    </mat-icon>
+  </div>
+
+
+  <h2>
+    Reveal card details
+  </h2>
+
+
+  <p>
+    Enter your password to view
+    the sensitive card information.
+  </p>
+
+
+  <div class="password-wrapper">
+
+    <input
+      [type]="
+        showPassword
+          ? 'text'
+          : 'password'
+      "
+      [(ngModel)]="password"
+      placeholder="Password"
+      autocomplete="current-password"
+      (keyup.enter)="confirm()"
+    >
+
+
+    <button
+      type="button"
+      class="password-eye"
+      (click)="
+        togglePasswordVisibility()
+      "
+    >
+      <mat-icon>
+        {{
+          showPassword
+            ? 'visibility_off'
+            : 'visibility'
+        }}
+      </mat-icon>
+    </button>
+
+  </div>
+
+
+  <div class="dialog-actions">
+
+    <button
+      type="button"
+      class="cancel-button"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+
+
+    <button
+      type="button"
+      class="confirm-button"
+      [disabled]="!password.trim()"
+      (click)="confirm()"
+    >
+      Continue
+    </button>
+
+  </div>
+
+</div>
