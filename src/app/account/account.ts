@@ -3,7 +3,9 @@ import {
   ElementRef,
   OnInit,
   OnDestroy,
-  ViewChild
+  PLATFORM_ID,
+  ViewChild,
+  inject
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -13,11 +15,25 @@ import {
   MatDialogModule
 } from '@angular/material/dialog';
 
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe,
+  isPlatformBrowser
+ } from '@angular/common';
 
 import {
   ChangePasswordDialog
 } from './change-password-dialog/change-password-dialog';
+
+import {
+  DeleteCardDialog
+} from './delete-card-dialog/delete-card-dialog';
+
+import {
+  CardStatusDialog
+} from './card-status-dialog/card-status-dialog';
+
+import {
+  RevealCardDialog
+} from './reveal-card-dialog/reveal-card-dialog';
 
 import {
   UserDetails,
@@ -28,6 +44,8 @@ import {
   CardResponse,
   CardService
 } from '../services/card';
+
+import { getErrorMessage } from '../utils/error-message';
 
 import {
   BehaviorSubject,
@@ -70,6 +88,8 @@ export class Account implements OnInit, OnDestroy {
     'card' | 'details' = 'card';
 
   private isSectionAnimating = false;
+  private accountTouchStartY = 0;
+  private platformId = inject(PLATFORM_ID);
 
 
   /*    
@@ -106,6 +126,8 @@ export class Account implements OnInit, OnDestroy {
   private activePointerId:
     number | null = null;
 
+    isCardOptionsOpen = false;
+
 
   /*    
      PROFILE
@@ -114,15 +136,7 @@ export class Account implements OnInit, OnDestroy {
   isProfileMenuOpen = false;
 
 //Actual cards
-cards = new BehaviorSubject<{
-  id: string;
-  number: string;
-  holder: string;
-  expiry: string;
-  cvv: string;
-  isBlocked: boolean;
-  isActive: boolean;
-}[]>([]);
+cards = new BehaviorSubject<CardResponse[]>([]);
 
 isCardsLoading = true;
 cardsError = '';
@@ -142,16 +156,22 @@ private cardsRefreshSubscription:
 ) {}
 
   ngOnInit(): void {
+
+  if (
+    !isPlatformBrowser(
+      this.platformId
+    )
+  ) {
+    return;
+  }
+
   this.loadUserDetails();
 
   this.loadCards();
 
-  this.cardsRefreshSubscription =
-    interval(2000)
-      .subscribe(() => {
-        this.loadCards(false);
-      });
+  
 }
+
 
 ngOnDestroy(): void {
   this.cardsRefreshSubscription
@@ -209,45 +229,13 @@ loadCards(
         cards: CardResponse[]
       ) => {
 
-        const mappedCards =
-          cards.map(
-            card => ({
-              id:
-                card.id,
-
-              number:
-                this.formatCardNumber(
-                  card.cardNumber
-                ),
-
-              holder:
-                card.firstName
-                  .trim()
-                  .toUpperCase(),
-
-              expiry:
-                this.formatExpirationDate(
-                  card.expirationDate
-                ),
-
-              cvv:
-                card.cvv,
-
-              isBlocked:
-                card.isBlocked,
-
-              isActive:
-                card.isActive
-            })
-          );
-
         this.cards.next(
-          mappedCards
+          cards
         );
 
         if (
           this.activeCardIndex >=
-          mappedCards.length
+          cards.length
         ) {
           this.activeCardIndex = 0;
         }
@@ -400,22 +388,282 @@ private formatExpirationDate(
           );
 
           this.isSavingField = false;
-
-          if (
-            typeof error.error ===
-              'string' &&
-            error.error.trim()
-          ) {
-            this.editFieldError =
-              error.error;
-            return;
-          }
-
-          this.editFieldError =
-            'Could not update this field.';
+          this.editFieldError = getErrorMessage(error, 'Could not update this field.');
         }
       });
   }
+
+
+
+get activeCard() {
+
+  const currentCards =
+    this.cards.value;
+
+  if (
+    currentCards.length === 0
+  ) {
+    return null;
+  }
+
+  return currentCards[
+    this.activeCardIndex
+  ] ?? null;
+}
+
+
+toggleCardOptions(): void {
+  this.isCardOptionsOpen =
+    !this.isCardOptionsOpen;
+}
+
+addNewCard(): void {
+
+  this.cardService
+    .addCard()
+    .subscribe({
+
+      next: () => {
+
+        this.isCardOptionsOpen = false;
+
+        this.loadCards(false);
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Add card failed:',
+          error
+        );
+      }
+
+    });
+}
+
+
+deleteCard(
+  cardId: string
+): void {
+
+  this.cardService
+    .deleteCard(cardId)
+    .subscribe({
+
+      next: () => {
+
+        this.isCardOptionsOpen = false;
+
+        this.loadCards(false);
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Delete card failed:',
+          error
+        );
+      }
+
+    });
+}
+
+
+deleteSelectedCard(): void {
+
+  const card =
+    this.activeCard;
+
+  if (!card) {
+    return;
+  }
+
+  this.isCardOptionsOpen = false;
+
+
+  const cleanNumber =
+    card.cardNumber.replace(
+      /\s+/g,
+      ''
+    );
+
+  const lastFourDigits =
+    cleanNumber.slice(-4);
+
+
+  const dialogRef =
+    this.dialog.open(
+      DeleteCardDialog,
+      {
+        width: '400px',
+
+        maxWidth:
+          'calc(100vw - 24px)',
+
+        disableClose: true,
+
+        panelClass:
+          'owlbank-delete-dialog',
+
+        data: {
+          lastFourDigits:
+            lastFourDigits
+        }
+      }
+    );
+
+
+  dialogRef
+    .afterClosed()
+    .subscribe(
+      (confirmed: boolean) => {
+
+        if (!confirmed) {
+          return;
+        }
+
+        this.deleteCard(
+          card.id
+        );
+      }
+    );
+}
+
+toggleSelectedCardStatus(): void {
+
+  const card =
+    this.activeCard;
+
+  if (!card) {
+    return;
+  }
+
+  this.isCardOptionsOpen = false;
+
+
+  const lastFourDigits =
+    card.cardNumber
+      .replace(/\s+/g, '')
+      .slice(-4);
+
+
+  const action:
+    'block' | 'activate' =
+      card.isBlocked
+        ? 'activate'
+        : 'block';
+
+
+  const dialogRef =
+    this.dialog.open(
+      CardStatusDialog,
+      {
+        width: '400px',
+
+        maxWidth:
+          'calc(100vw - 24px)',
+
+        disableClose: true,
+
+        data: {
+          action,
+          lastFourDigits
+        }
+      }
+    );
+
+
+  dialogRef
+    .afterClosed()
+    .subscribe(
+      (confirmed: boolean) => {
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        if (action === 'block') {
+
+          this.cardService
+            .blockCard(card.id)
+            .subscribe({
+
+              next: () => {
+
+                this.updateCardBlockedState(
+                  card.id,
+                  true
+                );
+              },
+
+              error: (error) => {
+
+                console.error(
+                  'Block card failed:',
+                  error
+                );
+              }
+
+            });
+
+          return;
+        }
+
+
+        this.cardService
+          .activateCard(card.id)
+          .subscribe({
+
+            next: () => {
+
+              this.updateCardBlockedState(
+                card.id,
+                false
+              );
+            },
+
+            error: (error) => {
+
+              console.error(
+                'Activate card failed:',
+                error
+              );
+            }
+
+          });
+      }
+    );
+}
+
+private updateCardBlockedState(
+  cardId: string,
+  isBlocked: boolean
+): void {
+
+  const updatedCards =
+    this.cards.value.map(
+      card => {
+
+        if (card.id !== cardId) {
+          return card;
+        }
+
+        return {
+          ...card,
+          isBlocked
+        };
+      }
+    );
+
+  this.cards.next(
+    updatedCards
+  );
+}
+
+closeCardOptions(): void {
+  this.isCardOptionsOpen = false;
+}
 
   private resetEditingState(): void {
     this.editingField = null;
@@ -444,30 +692,58 @@ private formatExpirationDate(
       */
 
   goToAccountSection(
-    section: 'card' | 'details'
-  ): void {
-    if (this.isSectionAnimating) {
-      return;
+  section: 'card' | 'details'
+): void {
+
+  if (this.isSectionAnimating) {
+    return;
+  }
+
+  this.activeAccountSection =
+    section;
+
+
+  /*
+    MOBILE
+  */
+
+  if (
+    window.innerWidth <= 650
+  ) {
+
+    if (
+      section === 'details'
+    ) {
+      this.detailsView
+        .nativeElement
+        .scrollTop = 0;
     }
 
-    this.activeAccountSection = section;
-    this.isSectionAnimating = true;
-
-    const target =
-      section === 'card'
-        ? this.cardView
-        : this.detailsView;
-
-    target.nativeElement
-      .scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-    setTimeout(() => {
-      this.isSectionAnimating = false;
-    }, 700);
+    return;
   }
+
+  /*
+    DESKTOP / TABLET
+  */
+
+  this.isSectionAnimating = true;
+
+  const target =
+    section === 'card'
+      ? this.cardView
+      : this.detailsView;
+
+  target.nativeElement
+    .scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+  setTimeout(() => {
+    this.isSectionAnimating =
+      false;
+  }, 700);
+}
 
   onAccountWheel(
     event: WheelEvent
@@ -525,7 +801,7 @@ private formatExpirationDate(
       !this.cardView ||
       !this.detailsView
     ) {
-      return;
+        return;
     }
 
     const containerRect =
@@ -573,6 +849,7 @@ private formatExpirationDate(
       licarirea cand ambele sectiuni sunt
       aproape la fel de vizibile.
     */
+
     if (
       Math.abs(
         cardVisible -
@@ -587,7 +864,6 @@ private formatExpirationDate(
         ? 'card'
         : 'details';
   }
-
 
   /*    
      CARD HELPERS
@@ -652,12 +928,175 @@ private formatExpirationDate(
   }
 
   toggleCard(): void {
-    if (this.isCarouselAnimating) {
+
+    if (
+      this.isCarouselAnimating
+    ) {
       return;
     }
 
-    this.isCardFlipped =
-      !this.isCardFlipped;
+
+    /*
+      Daca spatele este deja vizibil,
+      il ascundem fara sa mai cerem parola.
+    */
+
+    if (this.isCardFlipped) {
+      this.isCardFlipped = false;
+      return;
+    }
+
+
+    /*
+      Luam automat cardul pe care
+      utilizatorul se afla acum.
+    */
+
+    const card =
+      this.activeCard;
+
+    if (!card) {
+      return;
+    }
+
+    /*
+      Cerem parola.
+    */
+
+    const dialogRef =
+      this.dialog.open(
+        RevealCardDialog,
+        {
+          width: '400px',
+
+          maxWidth:
+            'calc(100vw - 24px)',
+
+          disableClose: true,
+
+          panelClass:
+            'owlbank-reveal-dialog'
+        }
+      );
+
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (
+          password:
+            string | null
+        ) => {
+
+          if (!password) {
+            return;
+          }
+
+          /*
+            card.id este ID-ul cardului
+            activ din carousel.
+
+            Nu cerem cardId de la user.
+          */
+          this.cardService
+            .getCardBackDetails(
+              password,
+              card.id
+            )
+            .subscribe({
+
+              next: (
+                details
+              ) => {
+
+                /*
+                  Salvam datele reale
+                  doar pe cardul activ.
+                */
+                this.updateCardBackDetails(
+                  card.id,
+                  details
+                );
+
+
+                /*
+                  Flip DOAR dupa raspuns
+                  valid de la backend.
+                */
+                this.isCardFlipped =
+                  true;
+              },
+
+
+              error: (error) => {
+
+                console.error(
+                  'Reveal card failed:',
+                  error
+                );
+
+                /*
+                  Daca parola este gresita
+                  sau request-ul esueaza,
+                  cardul ramane pe fata.
+                */
+                this.isCardFlipped =
+                  false;
+              }
+
+            });
+        }
+      );
+  }
+
+
+  private updateCardBackDetails(
+    cardId: string,
+    details: Pick<
+      CardResponse,
+      | 'cvv'
+      | 'expirationDate'
+      | 'cardNumber'
+      | 'isBlocked'
+    >
+  ): void {
+
+    const updatedCards =
+      this.cards.value.map(
+        card => {
+
+          if (
+            card.id !== cardId
+          ) {
+            return card;
+          }
+
+
+          return {
+            ...card,
+
+            cardNumber:
+              this.formatCardNumber(
+                details.cardNumber
+              ),
+
+            expirationDate:
+              this.formatExpirationDate(
+                details.expirationDate
+              ),
+
+            cvv:
+              details.cvv,
+
+            isBlocked:
+              details.isBlocked
+          };
+        }
+      );
+
+
+    this.cards.next(
+      updatedCards
+    );
   }
 
 
@@ -1053,7 +1492,6 @@ private formatExpirationDate(
     }, 300);
   }
 
-
   /*    
      PROFILE / ACCOUNT HELPERS
       */
@@ -1128,4 +1566,54 @@ private formatExpirationDate(
       }
     );
   }
+  onAccountTouchStart(
+  event: TouchEvent
+): void {
+
+  this.accountTouchStartY =
+    event.changedTouches[0].clientY;
+}
+
+onAccountTouchEnd(
+  event: TouchEvent
+): void {
+
+  const touchEndY =
+    event.changedTouches[0].clientY;
+
+  const deltaY =
+    touchEndY -
+    this.accountTouchStartY;
+
+  const swipeThreshold = 50;
+
+  if (
+    deltaY < -swipeThreshold &&
+    this.activeAccountSection === 'card'
+  ) {
+
+    this.goToAccountSection(
+      'details'
+    );
+
+    return;
+  }
+
+  /*
+    DETAILS -> CARD
+  */
+
+  if (
+    deltaY > swipeThreshold &&
+    this.activeAccountSection === 'details' &&
+    this.detailsView
+      .nativeElement
+      .scrollTop <= 0
+  ) {
+
+    this.goToAccountSection(
+      'card'
+    );
+  }
+}
 }

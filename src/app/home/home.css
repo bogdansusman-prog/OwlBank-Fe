@@ -806,14 +806,7 @@ mat-icon {
 */
 
 .quick-actions {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 8px;
-
-  margin-top: 12px;
+  display: none;
 }
 
 
@@ -1060,14 +1053,15 @@ mat-icon {
   }
 
   .quick-actions {
-    display: grid;
+  display: grid;
 
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
-    gap: 10px;
+  gap: 10px;
 
-    margin-top: 20px;
-  }
+  margin-top: 20px;
+} 
 
    .action-card {
     width: 100%;

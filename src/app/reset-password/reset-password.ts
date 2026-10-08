@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { AuthService } from '../services/auth';
+import { getErrorMessage } from '../utils/error-message';
 
 @Component({
   selector: 'app-reset-password',
@@ -67,22 +68,7 @@ export class ResetPassword {
 
       error: (error: HttpErrorResponse) => {
         this.isLoading = false;
-
-        if (error.status === 0) {
-          this.errorMessage = 'Cannot connect to the server.';
-          return;
-        }
-
-        if (
-          typeof error.error === 'string' &&
-          error.error.trim()
-        ) {
-          this.errorMessage = error.error;
-          return;
-        }
-
-        this.errorMessage =
-          'Password reset failed.';
+        this.errorMessage = getErrorMessage(error, 'Password reset failed.');
       }
     });
   }

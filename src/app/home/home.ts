@@ -129,35 +129,10 @@ export class Home
     }
 
 
-    /*
-      Prima încărcare.
-    */
-
     this.loadBalance();
 
     this.loadTransactions();
 
-
-    /*
-      Refresh automat la fiecare 2 secunde.
-
-      false = nu afișăm loading-ul de fiecare
-      dată, ca să nu pâlpâie pagina.
-    */
-
-    this.refreshSubscription =
-      interval(2000)
-        .subscribe(() => {
-
-          this.loadBalance(
-            false
-          );
-
-          this.loadTransactions(
-            false
-          );
-
-        });
   }
 
 

@@ -88,22 +88,95 @@
     <div
   class="account-sections"
   (wheel)="onAccountWheel($event)"
-  (scroll)="onAccountScroll($event)"
+  (touchstart)="onAccountTouchStart($event)"
+  (touchend)="onAccountTouchEnd($event)"
 >
 
       <!--    
            SCREEN 1 - CARD
          = -->
       <section
-        #cardView
-        class="account-view card-view"
-      >
+  #cardView
+  class="account-view card-view"
+  [class.mobile-active]="
+    activeAccountSection === 'card'
+  "
+>
+
+<div
+  class="card-options-wrapper"
+  [class.open]="isCardOptionsOpen"
+>
+
+  <button
+    type="button"
+    class="card-options-button"
+    (click)="toggleCardOptions()"
+  >
+    <mat-icon>
+      {{
+        isCardOptionsOpen
+          ? 'close'
+          : 'more_vert'
+      }}
+    </mat-icon>
+  </button>
+
+  @if (activeCard; as selectedCard) {
+
+    <button
+      type="button"
+      class="
+        card-option-action
+        status-action
+      "
+      (click)="toggleSelectedCardStatus()"
+    >
+      <mat-icon>
+        {{
+          selectedCard.isBlocked
+            ? 'check'
+            : 'block'
+        }}
+      </mat-icon>
+    </button>
+
+
+    <button
+      type="button"
+      class="
+        card-option-action
+        delete-action
+      "
+      (click)="deleteSelectedCard()"
+    >
+      <mat-icon>
+        delete
+      </mat-icon>
+    </button>
+
+  }
+
+
+  <button
+    type="button"
+    class="
+      card-option-action
+      add-action
+    "
+    (click)="addNewCard()"
+  >
+    <mat-icon>
+      add
+    </mat-icon>
+  </button>
+
+</div>
 
     <!--    
          CARD CAROUSEL
        = -->
     <section class="card-section">
-
       <div class="carousel-viewport">
 
         <div
@@ -230,7 +303,7 @@
 
                         {{
                           getMaskedNumber(
-                            card.number
+                            card.cardNumber
                           )
                         }}
 
@@ -245,7 +318,7 @@
                           </span>
 
                           <strong>
-                            {{ card.holder }}
+                            {{ card.firstName }} {{ card.lastName }}
                           </strong>
 
                         </div>
@@ -257,7 +330,7 @@
                           </span>
 
                           <strong>
-                            {{ card.expiry }}
+                            {{ card.expirationDate }}
                           </strong>
 
                         </div>
@@ -293,7 +366,7 @@
                           </span>
 
                           <strong>
-                            {{ card.number }}
+                            {{ card.cardNumber }}
                           </strong>
 
                         </div>
@@ -307,7 +380,7 @@
                             </span>
 
                             <strong>
-                              {{ card.expiry }}
+                              {{ card.expirationDate }}
                             </strong>
 
                           </div>
@@ -348,110 +421,126 @@
 
       </div>
 
+      @if (activeCard; as card) {
 
-      <!-- =================================================
-           CONTROALE
-      ================================================== -->
-      <div class="card-controls">
+  <div
+    class="card-current-status"
+    [class.active]="!card.isBlocked"
+    [class.blocked]="card.isBlocked"
+  >
+    <span class="status-dot"></span>
 
-        <button
-          type="button"
-          class="reveal-card-button"
-          (click)="toggleCard()"
-          aria-label="Show card details"
-        >
+    {{
+      card.isBlocked
+        ? 'Blocked'
+        : 'Active'
+    }}
+  </div>
 
-          <mat-icon>
-            {{
-              isCardFlipped
-                ? 'visibility_off'
-                : 'visibility'
-            }}
-          </mat-icon>
+}
 
-        </button>
+<!-- =================================================
+     CONTROALE
+================================================== -->
+<div class="card-controls">
 
+  <div class="card-action-buttons">
 
-        <div class="carousel-navigation">
+    <button
+      type="button"
+      class="reveal-card-button"
+      (click)="toggleCard()"
+      aria-label="Show card details"
+    >
+      <mat-icon>
+        {{
+          isCardFlipped
+            ? 'visibility_off'
+            : 'visibility'
+        }}
+      </mat-icon>
+    </button>
 
-          <button
-            type="button"
-            class="mobile-arrow-button"
-
-            [disabled]="
-              activeCardIndex === 0
-            "
-
-            (click)="previous()"
-
-            aria-label="Previous card"
-          >
-
-            <mat-icon>
-              arrow_back
-            </mat-icon>
-
-          </button>
+  </div>
 
 
-          <div class="carousel-dots">
+  <!-- CAROUSEL NAVIGATION -->
+  <div class="carousel-navigation">
 
-            @for (
-  card of (cards | async) ?? [];
-  track card.id;
-  let i = $index
-) {
-
-              <span
-                class="carousel-dot"
-
-                [class.active]="
-                  i === activeCardIndex
-                "
-              ></span>
-
-            }
-
-          </div>
+    <button
+      type="button"
+      class="mobile-arrow-button"
+      [disabled]="
+        activeCardIndex === 0
+      "
+      (click)="previous()"
+      aria-label="Previous card"
+    >
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+    </button>
 
 
-          <button
-            type="button"
-            class="mobile-arrow-button"
+    <div class="carousel-dots">
 
-            [disabled]="
-  ((cards | async)?.length ?? 0) === 0 ||
-  activeCardIndex ===
-  ((cards | async)?.length ?? 0) - 1
-"
+      @for (
+        card of (cards | async) ?? [];
+        track card.id;
+        let i = $index
+      ) {
 
-            (click)="next()"
+        <span
+          class="carousel-dot"
+          [class.active]="
+            i === activeCardIndex
+          "
+        ></span>
 
-            aria-label="Next card"
-          >
+      }
 
-            <mat-icon>
-              arrow_forward
-            </mat-icon>
+    </div>
 
-          </button>
 
-        </div>
+    <button
+      type="button"
+      class="mobile-arrow-button"
+      [disabled]="
+        ((cards | async)?.length ?? 0)
+          === 0 ||
+        activeCardIndex ===
+          ((cards | async)?.length ?? 0)
+          - 1
+      "
+      (click)="next()"
+      aria-label="Next card"
+    >
+      <mat-icon>
+        arrow_forward
+      </mat-icon>
+    </button>
 
-      </div>
+  </div>
 
-    </section>
+</div>
 
-      </section>
+</section>
+<!-- card-section -->
+
+</section>
+<!-- card-view -->
 
 
       <!--    
            SCREEN 2 - ACCOUNT DETAILS
          = -->
       <section
-        #detailsView
-        class="account-view details-view"
-      >
+  #detailsView
+  class="account-view details-view"
+  [class.mobile-active]="
+    activeAccountSection === 'details'
+  "
+>
 
     <!--    
          REAL ACCOUNT DATA
@@ -865,3 +954,7 @@
   </button>
 
 </nav>
+
+  </main>
+
+</div>

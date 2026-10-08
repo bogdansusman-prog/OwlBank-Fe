@@ -801,22 +801,60 @@ mat-icon {
     height: 60px;
   }
 
-  .transfer-card {
-    min-height: 160px;
+.transfer-card {
+  min-height: 112px;
 
-    padding: 22px;
+  padding:
+    14px
+    16px;
 
-    gap: 15px;
-  }
+  gap: 12px;
 
-  .card-icon {
-    width: 58px;
-    height: 58px;
-  }
+  border-radius: 15px;
+}
 
-  .card-content h2 {
-    font-size: 18px;
-  }
+
+.card-icon {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 12px;
+}
+
+
+.card-icon mat-icon {
+  width: 23px;
+  height: 23px;
+
+  font-size: 23px;
+}
+
+
+.card-content h2 {
+  font-size: 16px;
+}
+
+
+.card-content p {
+  margin-top: 4px;
+
+  font-size: 12px;
+
+  line-height: 1.35;
+}
+
+
+.arrow {
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+}
+
+
+.transfer-options {
+  gap: 12px;
+}
 }
 
 
@@ -862,33 +900,39 @@ mat-icon {
     font-size: 25px;
   }
 
-  .transfer-card {
-    min-height: 145px;
+.transfer-card {
+  min-height: 104px;
 
-    padding: 18px;
+  padding:
+    12px
+    13px;
 
-    gap: 12px;
-  }
+  gap: 10px;
+}
 
-  .card-icon {
-    width: 52px;
-    height: 52px;
-  }
 
-  .card-icon mat-icon {
-    width: 27px;
-    height: 27px;
+.card-icon {
+  width: 42px;
+  height: 42px;
+}
 
-    font-size: 27px;
-  }
 
-  .card-content h2 {
-    font-size: 17px;
-  }
+.card-icon mat-icon {
+  width: 21px;
+  height: 21px;
 
-  .card-content p {
-    font-size: 13px;
-  }
+  font-size: 21px;
+}
+
+
+.card-content h2 {
+  font-size: 15px;
+}
+
+
+.card-content p {
+  font-size: 11px;
+}
 }
 
 
