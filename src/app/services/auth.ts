@@ -28,13 +28,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<string> {
-  const params = new HttpParams()
-    .set('Email', email)
-    .set('Password', password);
-
-  return this.http.post('/api/login', null, {
-    params,
+login(email: string, password: string): Observable<string> {
+  return this.http.post('/api/login', { email, password }, {
     responseType: 'text'
   });
 }
